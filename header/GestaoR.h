@@ -15,10 +15,16 @@ class GestaoR {
         void readStations();
         void readNetwork();
 
+        std::vector<Vertex *> getVertexSet() const;
+
+        int edmondsKarp(const std::string &source, const std::string &target);
+
         static void drawMenu();
         static void drawListagemMenu();
-        static void drawNumberMenu();
         static void drawYMenu();
+
+        void drawStations() const;
+        void drawNetwork() const;
     private:
         Graph railwayNetwork;
 };

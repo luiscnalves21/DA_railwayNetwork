@@ -19,7 +19,6 @@ int main() {
             Menu::teclaErro();
             continue;
         }
-            // dependendo do input do utilizador, vai executar tarefas diferentes
         else if (op == "1") {
             while (true) {
                 GestaoR::drawListagemMenu();
@@ -29,43 +28,41 @@ int main() {
                     Menu::teclaErro();
                     continue;
                 } else if (op1 == "1") {
+                    // listar as estações
+                    r.drawStations();
                     Menu::voltar();
-                } else if (op1 == "2") {
-                    Menu::voltar();
-                } else if (op1 == "3") {
-                    Menu::voltar();
-                } else if (op1 == "4") {
-                    Menu::voltar();
-                } else if (op1 == "5") {
-                    Menu::voltar();
-                } else if (op1 == "6") {
+                }
+                else if (op1 == "2") {
+                    // listar as ligações
+                    r.drawNetwork();
                     Menu::voltar();
                 }
                 else if (op1 == "V" || op1 == "v") break;
             }
         }
         else if (op == "2") {
+            std::string source, target;
+            bool ignoreCin = true;
             while (true) {
-                GestaoR::drawNumberMenu();
-                std::string op2;
-                std::cin >> op2;
-                if (op2.length() != 1) {
+                std::cout << "\nInsere o nome da estacao de partida: ";
+                if (ignoreCin) std::cin.ignore();
+                ignoreCin = false;
+                std::getline(std::cin, source);
+                if (source.length() < 1) {
                     Menu::teclaErro();
                     continue;
                 }
-                else if (op2 == "1") {
-                    Menu::voltar();
+                std::cout << "\nInsere o nome da estacao de chegada: ";
+                std::getline(std::cin, target);
+                if (target.length() < 1) {
+                    Menu::teclaErro();
+                    continue;
                 }
-                else if (op2 == "2") {
-                    Menu::voltar();
-                }
-                else if (op2 == "3") {
-                    Menu::voltar();
-                }
-                else if (op2 == "V" || op2 == "v")  {
-                    break;
-                }
+                std::transform(source.begin(), source.end(), source.begin(), ::toupper);
+                std::transform(target.begin(), target.end(), target.begin(), ::toupper);
+                if (!r.edmondsKarp(source, target)) break;
             }
+            Menu::voltar();
         }
         else if (op == "3") {
             while (true) {

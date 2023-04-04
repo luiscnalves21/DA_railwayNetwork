@@ -4,14 +4,21 @@
 
 /************************* Vertex  **************************/
 
-Vertex::Vertex(int id): id(id) {}
+Vertex::Vertex(int id, const std::string &name, const std::string &district, const std::string &municipality, const std::string &township, const std::string &line) {
+    this->id = id;
+    this->name = name;
+    this->district = district;
+    this->municipality = municipality;
+    this->township = township;
+    this->line = line;
+}
 
 /*
  * Auxiliary function to add an outgoing edge to a vertex (this),
  * with a given destination vertex (d) and edge weight (w).
  */
-Edge * Vertex::addEdge(Vertex *d, double w) {
-    auto newEdge = new Edge(this, d, w);
+Edge * Vertex::addEdge(Vertex *d, double w, const std::string &service) {
+    auto newEdge = new Edge(this, d, w, service);
     adj.push_back(newEdge);
     d->incoming.push_back(newEdge);
     return newEdge;
@@ -56,68 +63,50 @@ bool Vertex::operator<(Vertex & vertex) const {
     return this->dist < vertex.dist;
 }
 
-int Vertex::getId() const {
-    return this->id;
-}
+int Vertex::getId() const { return this->id; }
 
-std::vector<Edge*> Vertex::getAdj() const {
-    return this->adj;
-}
+std::string Vertex::getName() const { return this->name; }
 
-bool Vertex::isVisited() const {
-    return this->visited;
-}
+std::string Vertex::getDistrict() const { return this->district; }
 
-bool Vertex::isProcessing() const {
-    return this->processing;
-}
+std::string Vertex::getMunicipality() const { return this->municipality; }
 
-unsigned int Vertex::getIndegree() const {
-    return this->indegree;
-}
+std::string Vertex::getTownship() const { return this->township; }
 
-double Vertex::getDist() const {
-    return this->dist;
-}
+std::string Vertex::getLine() const { return this->line; }
 
-Edge *Vertex::getPath() const {
-    return this->path;
-}
+std::vector<Edge*> Vertex::getAdj() const { return this->adj; }
 
-std::vector<Edge *> Vertex::getIncoming() const {
-    return this->incoming;
-}
+bool Vertex::isVisited() const { return this->visited; }
 
-void Vertex::setId(int id) {
-    this->id = id;
-}
+bool Vertex::isProcessing() const { return this->processing; }
 
-void Vertex::setVisited(bool visited) {
-    this->visited = visited;
-}
+unsigned int Vertex::getIndegree() const { return this->indegree; }
 
-void Vertex::setProcesssing(bool processing) {
-    this->processing = processing;
-}
+double Vertex::getDist() const { return this->dist; }
 
-void Vertex::setIndegree(unsigned int indegree) {
-    this->indegree = indegree;
-}
+Edge *Vertex::getPath() const { return this->path; }
 
-void Vertex::setDist(double dist) {
-    this->dist = dist;
-}
+std::vector<Edge *> Vertex::getIncoming() const { return this->incoming; }
 
-void Vertex::setPath(Edge *path) {
-    this->path = path;
-}
+void Vertex::setId(int id) { this->id = id; }
+
+void Vertex::setVisited(bool visited) { this->visited = visited; }
+
+void Vertex::setProcesssing(bool processing) { this->processing = processing; }
+
+void Vertex::setIndegree(unsigned int indegree) { this->indegree = indegree; }
+
+void Vertex::setDist(double dist) { this->dist = dist; }
+
+void Vertex::setPath(Edge *path) { this->path = path; }
 
 void Vertex::deleteEdge(Edge *edge) {
     Vertex *dest = edge->getDest();
     // Remove the corresponding edge from the incoming list
     auto it = dest->incoming.begin();
     while (it != dest->incoming.end()) {
-        if ((*it)->getOrig()->getId() == id) {
+        if ((*it)->getOrig()->getId() == this->id) {
             it = dest->incoming.erase(it);
         }
         else {
@@ -129,40 +118,24 @@ void Vertex::deleteEdge(Edge *edge) {
 
 /********************** Edge  ****************************/
 
-Edge::Edge(Vertex *orig, Vertex *dest, double w): orig(orig), dest(dest), weight(w) {}
+Edge::Edge(Vertex *orig, Vertex *dest, double w, const std::string &service): orig(orig), dest(dest), weight(w), service(service) {}
 
-Vertex * Edge::getDest() const {
-    return this->dest;
-}
+Vertex * Edge::getDest() const { return this->dest; }
 
-double Edge::getWeight() const {
-    return this->weight;
-}
+double Edge::getWeight() const { return this->weight; }
 
-Vertex * Edge::getOrig() const {
-    return this->orig;
-}
+Vertex * Edge::getOrig() const { return this->orig; }
 
-Edge *Edge::getReverse() const {
-    return this->reverse;
-}
+Edge *Edge::getReverse() const { return this->reverse; }
 
-bool Edge::isSelected() const {
-    return this->selected;
-}
+bool Edge::isSelected() const { return this->selected; }
 
-double Edge::getFlow() const {
-    return flow;
-}
+double Edge::getFlow() const { return this->flow; }
 
-void Edge::setSelected(bool selected) {
-    this->selected = selected;
-}
+std::string Edge::getService() const { return this->service; }
 
-void Edge::setReverse(Edge *reverse) {
-    this->reverse = reverse;
-}
+void Edge::setSelected(bool selected) { this->selected = selected; }
 
-void Edge::setFlow(double flow) {
-    this->flow = flow;
-}
+void Edge::setReverse(Edge *reverse) { this->reverse = reverse; }
+
+void Edge::setFlow(double flow) { this->flow = flow; }

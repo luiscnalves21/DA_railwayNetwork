@@ -1,15 +1,9 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <set>
-#include <queue>
-#include <stack>
-#include <algorithm>
 
-#include "../header/Menu.h"
 #include "../header/GestaoR.h"
-#include "../header/Station.h"
-#include "../header/Network.h"
+#include "../header/Menu.h"
 
 GestaoR::GestaoR() {
     railwayNetwork = Graph();
@@ -25,6 +19,7 @@ void GestaoR::readStations() {
     ifs1.open(ficheiro, std::ios::in);
     std::string segment;
     getline(ifs1, segment);
+    int id = 0;
 
     while (getline(ifs1, segment)) {
         std::string name, district, municipality, township, line;
@@ -34,8 +29,14 @@ void GestaoR::readStations() {
         getline(stream, municipality, ',');
         getline(stream, township, ',');
         getline(stream, line, '\r');
-        Station station = Station(name, district, municipality, township, line);
+        std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+        std::transform(district.begin(), district.end(), district.begin(), ::toupper);
+        std::transform(municipality.begin(), municipality.end(), municipality.begin(), ::toupper);
+        std::transform(township.begin(), township.end(), township.begin(), ::toupper);
+        std::transform(line.begin(), line.end(), line.begin(), ::toupper);
 
+        railwayNetwork.addVertex(id, name, district, municipality, township, line);
+        id++;
     }
     ifs1.close();
 }
@@ -45,7 +46,7 @@ void GestaoR::readStations() {
  * Complexidade Temporal O(n) (n é o tamanho do ficheiro retirando o cabeçalho).
  */
 void GestaoR::readNetwork() {
-    std::string ficheiro = "../resources/airports.csv";
+    std::string ficheiro = "../resources/network.csv";
     std::ifstream ifs2;
     ifs2.open(ficheiro, std::ios::in);
     std::string segment;
@@ -53,18 +54,45 @@ void GestaoR::readNetwork() {
 
     while (getline(ifs2, segment)) {
         std::string station_A, station_B, capacityS, service;
-        int capacity;
+        double capacity;
         std::istringstream stream(segment);
         getline(stream, station_A, ',');
         getline(stream, station_B, ',');
         getline(stream, capacityS, ',');
         getline(stream, service, '\r');
-        capacity = stoi(capacityS);
-        Network network = Network(station_A, station_B, capacity, service);
-        // TODO ADD NETWORK TO "GRAPH" OR SOMETHING
-
+        capacity = stod(capacityS);
+        std::transform(station_A.begin(), station_A.end(), station_A.begin(), ::toupper);
+        std::transform(station_B.begin(), station_B.end(), station_B.begin(), ::toupper);
+        std::transform(service.begin(), service.end(), service.begin(), ::toupper);
+        int idStation_A = railwayNetwork.findVertexName(station_A);
+        int idStation_B = railwayNetwork.findVertexName(station_B);
+        railwayNetwork.addBidirectionalEdge(idStation_A, idStation_B, capacity, service);
     }
     ifs2.close();
+}
+
+std::vector<Vertex *> GestaoR::getVertexSet() const { return railwayNetwork.getVertexSet(); }
+
+int GestaoR::edmondsKarp(const std::string &source, const std::string &target) {
+    int sourceId = railwayNetwork.findVertexName(source);
+    int targetId = railwayNetwork.findVertexName(target);
+    if (sourceId == -1 || targetId == -1) {
+        Menu::estacaoNaoExiste();
+        return 1;
+    }
+    else if (sourceId == targetId) {
+        Menu::estacoesIguais();
+        return 1;
+    }
+    railwayNetwork.edmondsKarp(sourceId, targetId);
+
+    double flow = 0.0;
+    for (Edge *edge : railwayNetwork.getVertexSet().at(targetId)->getIncoming()) {
+        flow += edge->getFlow();
+        // std::cout << "Orig: " << edge->getOrig()->getName() << " Dest: " << edge->getDest()->getName() << " Flow: " << edge->getFlow() << std::endl;
+    }
+    std::cout << "\nO numero maximo de comboios em circulacao entre " << source << " e " << target << " e de " << flow << "." << std::endl;
+    return 0;
 }
 
 /**
@@ -90,12 +118,8 @@ void GestaoR::drawMenu() {
     std::cout << "\n+---------------------------------------------+\n"
             "|               RAILWAY NETWORK               |\n"
             "+---------------------------------------------+\n"
-            "| [1] - Listagens Completas                   |\n" // irá abrir novo menu
-            "| [2] - N a partir de um Aeroporto            |\n" // irá abrir novo menu
-            "| [3] - Destinos com maximo de Y voos         |\n" // irá abrir novo menu
-            "| [4] - Diametros                             |\n" // irá abrir novo menu
-            "| [5] - Viajar entre dois locais              |\n" // irá abrir novo menu
-            "| [6] - Pontos de articulacao                 |\n" // irá abrir novo menu
+            "| [1] - Listagens Completas                   |\n"
+            "| [2] - Maximo n de comboios entre 2 estacoes |\n"
             "| [Q] - Sair da aplicacao                     |\n"
             "+---------------------------------------------+\n";
     std::cout << "\nEscolha a opcao e pressione ENTER:";
@@ -109,28 +133,8 @@ void GestaoR::drawListagemMenu() {
     std::cout << "\n+-----------------------------------------------------+\n"
             "|                GESTAO DE AEROPORTOS                 |\n"
             "+-----------------------------------------------------+\n"
-            "| [1] - Listar Cidades                                |\n"
-            "| [2] - Listar Aeroportos                             |\n"
-            "| [3] - Listar Companhias Aereas                      |\n"
-            "| [4] - Listar Voos                                   |\n"
-            "| [5] - Listar Aeroportos numa Cidade                 |\n"
-            "| [6] - Listar Companhias Aereas num Aeroporto        |\n"
-            "| [V] - Voltar                                        |\n"
-            "+-----------------------------------------------------+\n";
-    std::cout << "\nEscolha a opcao e pressione ENTER:";
-}
-
-/**
- * Desenho de um menu secundário para mais opções.
- * Complexidade Temporal O(1).
- */
-void GestaoR::drawNumberMenu() {
-    std::cout << "\n+-----------------------------------------------------+\n"
-            "|                GESTAO DE AEROPORTOS                 |\n"
-            "+-----------------------------------------------------+\n"
-            "| [1] - N Companhias Aereas num Aeroporto             |\n"
-            "| [2] - N Destinos Diferentes a partir de um Aeroporto|\n"
-            "| [3] - N Paises Diferentes a partir de um Aeroporto  |\n"
+            "| [1] - Listar Estacoes                               |\n"
+            "| [2] - Listar Ligacoes                               |\n"
             "| [V] - Voltar                                        |\n"
             "+-----------------------------------------------------+\n";
     std::cout << "\nEscolha a opcao e pressione ENTER:";
@@ -150,6 +154,21 @@ void GestaoR::drawYMenu() {
             "| [V] - Voltar                                      |\n"
             "+---------------------------------------------------+\n";
     std::cout << "\nEscolha a opcao e pressione ENTER:";
+}
+
+void GestaoR::drawStations() const {
+    for (const Vertex *vertex : getVertexSet()) {
+        std::cout << "Id: " << vertex->getId() << " Name: " << vertex->getName() << std::endl;
+    }
+}
+
+void GestaoR::drawNetwork() const {
+    for (const Vertex *vertex : getVertexSet()) {
+        std::cout << "Name: " << vertex->getName() << " " << vertex->getAdj().size() << std::endl;
+        for (Edge *edge : vertex->getAdj()) {
+            std::cout << "Destination: " << edge->getDest()->getName() << " Capacity: " << edge->getWeight() << " Service: " << edge->getService() << std::endl;
+        }
+    }
 }
 
 /**

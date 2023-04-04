@@ -110,38 +110,10 @@ CMakeFiles/DA_railwayNetwork.dir/src/Menu.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DA_railwayNetwork.dir/src/Menu.cpp.s"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\githubProjects\DA_railwayNetwork\src\Menu.cpp -o CMakeFiles\DA_railwayNetwork.dir\src\Menu.cpp.s
 
-CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.obj: CMakeFiles/DA_railwayNetwork.dir/flags.make
-CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.obj: ../src/Network.cpp
-CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.obj: CMakeFiles/DA_railwayNetwork.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\githubProjects\DA_railwayNetwork\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.obj -MF CMakeFiles\DA_railwayNetwork.dir\src\Network.cpp.obj.d -o CMakeFiles\DA_railwayNetwork.dir\src\Network.cpp.obj -c C:\githubProjects\DA_railwayNetwork\src\Network.cpp
-
-CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\githubProjects\DA_railwayNetwork\src\Network.cpp > CMakeFiles\DA_railwayNetwork.dir\src\Network.cpp.i
-
-CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\githubProjects\DA_railwayNetwork\src\Network.cpp -o CMakeFiles\DA_railwayNetwork.dir\src\Network.cpp.s
-
-CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.obj: CMakeFiles/DA_railwayNetwork.dir/flags.make
-CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.obj: ../src/Station.cpp
-CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.obj: CMakeFiles/DA_railwayNetwork.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\githubProjects\DA_railwayNetwork\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.obj -MF CMakeFiles\DA_railwayNetwork.dir\src\Station.cpp.obj.d -o CMakeFiles\DA_railwayNetwork.dir\src\Station.cpp.obj -c C:\githubProjects\DA_railwayNetwork\src\Station.cpp
-
-CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\githubProjects\DA_railwayNetwork\src\Station.cpp > CMakeFiles\DA_railwayNetwork.dir\src\Station.cpp.i
-
-CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\githubProjects\DA_railwayNetwork\src\Station.cpp -o CMakeFiles\DA_railwayNetwork.dir\src\Station.cpp.s
-
 CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.obj: CMakeFiles/DA_railwayNetwork.dir/flags.make
 CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.obj: ../data_structures/Graph.cpp
 CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.obj: CMakeFiles/DA_railwayNetwork.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\githubProjects\DA_railwayNetwork\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\githubProjects\DA_railwayNetwork\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.obj"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.obj -MF CMakeFiles\DA_railwayNetwork.dir\data_structures\Graph.cpp.obj.d -o CMakeFiles\DA_railwayNetwork.dir\data_structures\Graph.cpp.obj -c C:\githubProjects\DA_railwayNetwork\data_structures\Graph.cpp
 
 CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.i: cmake_force
@@ -155,7 +127,7 @@ CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.s: cmake_force
 CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.obj: CMakeFiles/DA_railwayNetwork.dir/flags.make
 CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.obj: ../data_structures/VertexEdge.cpp
 CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.obj: CMakeFiles/DA_railwayNetwork.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\githubProjects\DA_railwayNetwork\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\githubProjects\DA_railwayNetwork\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.obj"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.obj -MF CMakeFiles\DA_railwayNetwork.dir\data_structures\VertexEdge.cpp.obj.d -o CMakeFiles\DA_railwayNetwork.dir\data_structures\VertexEdge.cpp.obj -c C:\githubProjects\DA_railwayNetwork\data_structures\VertexEdge.cpp
 
 CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.i: cmake_force
@@ -171,8 +143,6 @@ DA_railwayNetwork_OBJECTS = \
 "CMakeFiles/DA_railwayNetwork.dir/main.cpp.obj" \
 "CMakeFiles/DA_railwayNetwork.dir/src/GestaoR.cpp.obj" \
 "CMakeFiles/DA_railwayNetwork.dir/src/Menu.cpp.obj" \
-"CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.obj" \
-"CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.obj" \
 "CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.obj" \
 "CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.obj"
 
@@ -182,15 +152,13 @@ DA_railwayNetwork_EXTERNAL_OBJECTS =
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/main.cpp.obj
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/src/GestaoR.cpp.obj
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/src/Menu.cpp.obj
-DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.obj
-DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.obj
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/data_structures/Graph.cpp.obj
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/data_structures/VertexEdge.cpp.obj
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/build.make
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/linklibs.rsp
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/objects1.rsp
 DA_railwayNetwork.exe: CMakeFiles/DA_railwayNetwork.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\githubProjects\DA_railwayNetwork\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable DA_railwayNetwork.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\githubProjects\DA_railwayNetwork\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable DA_railwayNetwork.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\DA_railwayNetwork.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

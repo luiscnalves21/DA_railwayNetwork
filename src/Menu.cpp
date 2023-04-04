@@ -26,58 +26,34 @@ void Menu::voltar() {
     }
 }
 
-void Menu::aeroportoNaoExiste() {
+void Menu::estacaoNaoExiste() {
     cout << "\n+---------------------------------------------------+\n"
-            "| Pelo menos um dos aeroportos indicados nao existe |\n"
+            "| Pelo menos uma das estacoes indicadas nao existe  |\n"
             "+---------------------------------------------------+\n";
 }
 
-void Menu::aeroportoNaoEncontrado() {
+void Menu::estacaoNaoEncontrada() {
     cout << "\n+---------------------------------+\n"
-            "| O aeroporto indicado nao existe |\n"
+            "|  A estacao indicada nao existe  |\n"
             "+---------------------------------+\n";
 }
 
-void Menu::countryNotFound() {
-    cout << "\n+----------------------------+\n"
-            "| O pais indicado nao existe |\n"
-            "+----------------------------+\n";
-}
-
-void Menu::airportNotFound() {
-    cout << "\n+--------------------------------------------------------+\n"
-            "| Nao existe nenhum aeroporto no pais e cidade indicados |\n"
-            "+--------------------------------------------------------+\n";
-}
-
-void Menu::aeroportosIguais() {
+void Menu::estacoesIguais() {
     cout << "\n+------------------------------------+\n"
-            "| Os aeroportos inseridos sao iguais |\n"
+            "|  As estacoes inseridas sao iguais  |\n"
             "+------------------------------------+\n";
 }
 
 void Menu::semCaminhoPossivel() {
     cout << "\n+---------------------------------------------------------------------+\n"
-            "| Nao existe nenhum caminho possivel entre os aeroportos selecionados |\n"
+            "|  Nao existe nenhum caminho possivel entre as estacoes selecionadas  |\n"
             "+---------------------------------------------------------------------+\n";
-}
-
-void Menu::companhiaNaoExiste() {
-    cout << "\n+---------------------------------+\n"
-            "| A companhia indicada nao existe |\n"
-            "+---------------------------------+\n";
-}
-
-void Menu::caminhoCompanhiaPossivel() {
-    cout << "\n+--------------------------------------------------------------------+\n"
-            "| Nao existe nenhum trajeto possivel com a/as companhia/s indicada/s |\n"
-            "+--------------------------------------------------------------------+\n";
 }
 
 void Menu::abriuAplicacao() {
     cout << "\n+---------------------------------------------+\n"
             "|          Muito bem-vindo a aplicacao        |\n"
-            "|            de Gestao de Aeroportos          |\n"
+            "|             de Gestao Ferroviaria           |\n"
             "|               Espero ser util : )           |\n"
             "+---------------------------------------------+\n";
 }

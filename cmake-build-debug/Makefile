@@ -248,54 +248,6 @@ src/Menu.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\DA_railwayNetwork.dir\build.make CMakeFiles/DA_railwayNetwork.dir/src/Menu.cpp.s
 .PHONY : src/Menu.cpp.s
 
-src/Network.obj: src/Network.cpp.obj
-.PHONY : src/Network.obj
-
-# target to build an object file
-src/Network.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\DA_railwayNetwork.dir\build.make CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.obj
-.PHONY : src/Network.cpp.obj
-
-src/Network.i: src/Network.cpp.i
-.PHONY : src/Network.i
-
-# target to preprocess a source file
-src/Network.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\DA_railwayNetwork.dir\build.make CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.i
-.PHONY : src/Network.cpp.i
-
-src/Network.s: src/Network.cpp.s
-.PHONY : src/Network.s
-
-# target to generate assembly for a file
-src/Network.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\DA_railwayNetwork.dir\build.make CMakeFiles/DA_railwayNetwork.dir/src/Network.cpp.s
-.PHONY : src/Network.cpp.s
-
-src/Station.obj: src/Station.cpp.obj
-.PHONY : src/Station.obj
-
-# target to build an object file
-src/Station.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\DA_railwayNetwork.dir\build.make CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.obj
-.PHONY : src/Station.cpp.obj
-
-src/Station.i: src/Station.cpp.i
-.PHONY : src/Station.i
-
-# target to preprocess a source file
-src/Station.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\DA_railwayNetwork.dir\build.make CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.i
-.PHONY : src/Station.cpp.i
-
-src/Station.s: src/Station.cpp.s
-.PHONY : src/Station.s
-
-# target to generate assembly for a file
-src/Station.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\DA_railwayNetwork.dir\build.make CMakeFiles/DA_railwayNetwork.dir/src/Station.cpp.s
-.PHONY : src/Station.cpp.s
-
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -320,12 +272,6 @@ help:
 	@echo ... src/Menu.obj
 	@echo ... src/Menu.i
 	@echo ... src/Menu.s
-	@echo ... src/Network.obj
-	@echo ... src/Network.i
-	@echo ... src/Network.s
-	@echo ... src/Station.obj
-	@echo ... src/Station.i
-	@echo ... src/Station.s
 .PHONY : help
 
 

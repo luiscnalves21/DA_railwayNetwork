@@ -103,12 +103,6 @@
 		<Unit filename="C:/githubProjects/DA_railwayNetwork/src/Menu.cpp">
 			<Option target="DA_railwayNetwork"/>
 		</Unit>
-		<Unit filename="C:/githubProjects/DA_railwayNetwork/src/Network.cpp">
-			<Option target="DA_railwayNetwork"/>
-		</Unit>
-		<Unit filename="C:/githubProjects/DA_railwayNetwork/src/Station.cpp">
-			<Option target="DA_railwayNetwork"/>
-		</Unit>
 		<Unit filename="C:/githubProjects/DA_railwayNetwork/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
