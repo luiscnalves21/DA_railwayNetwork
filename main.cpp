@@ -37,6 +37,18 @@ int main() {
                     r.drawNetwork();
                     Menu::voltar();
                 }
+                else if (op1 == "3") {
+                    // listar as ligações de uma estação
+                    std::string name;
+                    bool ignoreCin = true;
+                    std::cout << "\nInsira o nome da estacao: ";
+                    if (ignoreCin) std::cin.ignore();
+                    ignoreCin = false;
+                    std::getline(std::cin, name);
+                    std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+                    r.drawStationNetwork(name);
+                    Menu::voltar();
+                }
                 else if (op1 == "V" || op1 == "v") break;
             }
         }
@@ -44,7 +56,7 @@ int main() {
             std::string source, target;
             bool ignoreCin = true;
             while (true) {
-                std::cout << "\nInsere o nome da estacao de partida: ";
+                std::cout << "\nInsira o nome da estacao de partida: ";
                 if (ignoreCin) std::cin.ignore();
                 ignoreCin = false;
                 std::getline(std::cin, source);
@@ -52,7 +64,7 @@ int main() {
                     Menu::teclaErro();
                     continue;
                 }
-                std::cout << "\nInsere o nome da estacao de chegada: ";
+                std::cout << "\nInsira o nome da estacao de chegada: ";
                 std::getline(std::cin, target);
                 if (target.length() < 1) {
                     Menu::teclaErro();
@@ -65,27 +77,8 @@ int main() {
             Menu::voltar();
         }
         else if (op == "3") {
-            while (true) {
-                GestaoR::drawYMenu();
-                std::string op3;
-                std::cin >> op3;
-                if (op3.length() != 1) {
-                    Menu::teclaErro();
-                    continue;
-                }
-                else if (op3 == "1") {
-                    Menu::voltar();
-                }
-                else if (op3 == "2") {
-                    Menu::voltar();
-                }
-                else if (op3 == "3") {
-                    Menu::voltar();
-                }
-                else if (op3 == "V" || op3 == "v") {
-                    break;
-                }
-            }
+            r.fullAdvantage();
+            Menu::voltar();
         }
         else if (op == "q" || op == "Q") {
             Menu::fechouAplicacao();

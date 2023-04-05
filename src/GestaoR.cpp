@@ -35,6 +35,8 @@ void GestaoR::readStations() {
         std::transform(township.begin(), township.end(), township.begin(), ::toupper);
         std::transform(line.begin(), line.end(), line.begin(), ::toupper);
 
+        if (name.length() > getMaxStationLength()) setMaxStationLength((int)name.length());
+
         railwayNetwork.addVertex(id, name, district, municipality, township, line);
         id++;
     }
@@ -95,33 +97,116 @@ int GestaoR::edmondsKarp(const std::string &source, const std::string &target) {
     return 0;
 }
 
+void GestaoR::combineFA(std::vector<std::pair<std::string, std::string>> &edgesNames, std::vector<Vertex *> &vertexs) {
+    for (int i = 0; i < vertexs.size(); i++) {
+        for (int j = 0; j < vertexs.size(); j++) {
+            if (i != j) {
+                bool flag = false;
+                for (const std::pair<std::string, std::string> edgeName : edgesNames) {
+                    if (vertexs.at(i)->getName() == edgeName.first && vertexs.at(j)->getName() == edgeName.second || vertexs.at(i)->getName() == edgeName.second && vertexs.at(j)->getName() == edgeName.first) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    edgesNames.emplace_back(vertexs.at(i)->getName(), vertexs.at(j)->getName());
+                }
+            }
+        }
+    }
+}
+
+void GestaoR::dfsFA(std::vector<Edge *> &maxEdges, Vertex *vertex, double max, std::vector<Vertex *> &vertexs) {
+    vertex->setVisited(true);
+    for (Edge *adj : vertex->getAdj()) {
+        if (!adj->getDest()->isVisited() && adj->getWeight() == max) {
+            vertexs.push_back(adj->getDest());
+            dfsFA(maxEdges, adj->getDest(), max, vertexs);
+        }
+    }
+}
+
+void GestaoR::fullAdvantage() {
+    double max = 0.0;
+    std::vector<Edge *> maxEdges;
+    for (Vertex *vertex : railwayNetwork.getVertexSet()) {
+        for (Edge *edge : vertex->getAdj()) {
+            if (edge->getWeight() > max) {
+                max = edge->getWeight();
+                maxEdges.clear();
+                maxEdges.push_back(edge);
+            }
+            else if (edge->getWeight() == max) {
+                bool flag = false;
+                for (Edge *e : maxEdges) {
+                    if (e->getOrig() == edge->getOrig() && e->getDest() == edge->getDest() || e->getOrig() == edge->getDest() && e->getDest() == edge->getOrig()) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (!flag) {
+                    maxEdges.push_back(edge);
+                }
+            }
+        }
+    }
+    for (Edge *edge : maxEdges) {
+        edge->getOrig()->setVisited(false);
+        edge->getDest()->setVisited(false);
+    }
+    std::vector<std::pair<std::string, std::string>> edgesNames;
+    std::pair<std::string, std::string> edgeName;
+    for (Edge *e : maxEdges) {
+        edgeName.first = e->getOrig()->getName();
+        edgeName.second = e->getDest()->getName();
+        edgesNames.push_back(edgeName);
+    }
+    std::vector<Vertex *> vertexs;
+    for (Edge *edge : maxEdges) {
+        if (!edge->getOrig()->isVisited()) {
+            vertexs.push_back(edge->getOrig());
+
+            dfsFA(maxEdges, edge->getOrig(), max, vertexs);
+
+            combineFA(edgesNames, vertexs);
+        }
+        vertexs.clear();
+    }
+    std::sort(edgesNames.begin(), edgesNames.end(), [](std::pair<std::string, std::string> a, std::pair<std::string, std::string> b){
+        return a.first < b.first;
+    });
+    drawFullAdvantages(edgesNames);
+    std::cout << "\nExistem " << edgesNames.size() << " pares de estacoes com o maximo de comboios a " << max << "." << std::endl;
+}
+
 /**
  * Função para ajudar a centralizar textos.
  * Complexidade Temporal O(1).
  * @param n
  * @param v
  * @return par com o número de espaços e se a palavra é par ou ímpar.
- *//*
-pair<int, int> GestaoR::auxCenterDraw(int n, bool v) {
+ */
+std::pair<int, int> GestaoR::auxCenterDraw(int n, bool v) {
     int pad1 = n;
     int pad2;
-    if (v) pad2 = pad1 + 1;
+    if (!v) pad2 = pad1 + 1;
     else pad2 = pad1;
-    return pair<int, int>{pad1, pad2};
-}*/
+    return std::pair<int, int>{pad1, pad2};
+}
 
 /**
  * Desenho do Menu principal.
  * Complexidade Temporal O(1).
  */
 void GestaoR::drawMenu() {
-    std::cout << "\n+---------------------------------------------+\n"
-            "|               RAILWAY NETWORK               |\n"
-            "+---------------------------------------------+\n"
-            "| [1] - Listagens Completas                   |\n"
-            "| [2] - Maximo n de comboios entre 2 estacoes |\n"
-            "| [Q] - Sair da aplicacao                     |\n"
-            "+---------------------------------------------+\n";
+    std::cout << "\n+-------------------------------------------------------------+\n"
+            "|                       RAILWAY NETWORK                       |\n"
+            "+-------------------------------------------------------------+\n"
+            "| [1] - Listagens Completas                                   |\n"
+            "| [2] - Maximo n de comboios entre 2 estacoes                 |\n"
+            "| [3] - Pares de estacoes com a maior quantidade de comboios  |\n"
+            "| [Q] - Sair da aplicacao                                     |\n"
+            "+-------------------------------------------------------------+\n";
     std::cout << "\nEscolha a opcao e pressione ENTER:";
 }
 
@@ -135,24 +220,9 @@ void GestaoR::drawListagemMenu() {
             "+-----------------------------------------------------+\n"
             "| [1] - Listar Estacoes                               |\n"
             "| [2] - Listar Ligacoes                               |\n"
+            "| [3] - Listar Ligacoes de uma estacao                |\n"
             "| [V] - Voltar                                        |\n"
             "+-----------------------------------------------------+\n";
-    std::cout << "\nEscolha a opcao e pressione ENTER:";
-}
-
-/**
- * Desenho de um menu secundário para mais opções.
- * Complexidade Temporal O(1).
- */
-void GestaoR::drawYMenu() {
-    std::cout << "\n+---------------------------------------------------+\n"
-            "|                GESTAO DE AEROPORTOS               |\n"
-            "+---------------------------------------------------+\n"
-            "| [1] - Aeroportos Atingiveis num maximo de Y voos  |\n"
-            "| [2] - Cidades Atingiveis num maximo de Y voos     |\n"
-            "| [3] - Paises Atingiveis num maximo de Y voos      |\n"
-            "| [V] - Voltar                                      |\n"
-            "+---------------------------------------------------+\n";
     std::cout << "\nEscolha a opcao e pressione ENTER:";
 }
 
@@ -171,12 +241,67 @@ void GestaoR::drawNetwork() const {
     }
 }
 
+void GestaoR::drawStationNetwork(const std::string &name) {
+    Vertex *vertex = railwayNetwork.findVertexId(railwayNetwork.findVertexName(name));
+    if (vertex == nullptr) return;
+    for (Edge *edge : vertex->getAdj()) {
+        std::cout << "Destino: " << edge->getDest()->getName() << " Capacidade: " << edge->getWeight() << std::endl;
+    }
+}
+
+void GestaoR::drawFullAdvantage(std::pair<std::string, std::string> edgeName, bool header) const {
+    if (header) {
+        std::cout << "\n+------------------------------------+------------------------------------+\n"
+                "|             ESTACAO 1              |              ESTACAO 2             |\n"
+                "+------------------------------------+------------------------------------+\n";
+    }
+    std::cout << "|";
+    std::pair<int, int> pad = auxCenterDraw(getMaxStationLength() - (int) edgeName.first.length(),
+                                       (int) edgeName.first.length() % 2 == 0);
+    for (int f = 0; f < pad.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << edgeName.first;
+    for (int e = 0; e < pad.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|";
+    std::pair<int, int> padCountry = auxCenterDraw(getMaxStationLength() - (int) edgeName.second.length(),
+                                              (int) edgeName.second.length() % 2 == 0);
+    for (int f = 0; f < padCountry.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << edgeName.second;
+    for (int e = 0; e < padCountry.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|" << "\n";
+}
+
+void GestaoR::drawFullAdvantages(std::vector<std::pair<std::string, std::string>> edgesNames) const {
+    bool header = true;
+    for (const std::pair<std::string, std::string>& edgeName : edgesNames) {
+        drawFullAdvantage(edgeName, header);
+        header = false;
+    }
+    std::cout << "+------------------------------------+------------------------------------+\n";
+}
+
+void GestaoR::setMaxStationLength(int maxLength) { maxStationLenght = maxLength; }
+
+int GestaoR::getMaxStationLength() const { return maxStationLenght; }
+
 /**
  * Desenha uma cidade (parâmetro cc) e identifica se é a 1ª cidade a ser escrita para desenhar o cabeçalho da tabela (parâmetro header).
  * Complexidade Temporal O(n).
  * @param cc
  * @param header
- *//*
+ */
+ /*
 void GestaoR::drawCity(const CityCountry &cc, bool header) const {
     if (header) {
         cout << "\n+-------------------------------+---------------------------------+\n"
@@ -214,7 +339,8 @@ void GestaoR::drawCity(const CityCountry &cc, bool header) const {
  * Desenha todas as cidades e chama a função drawCity para desenhar uma de cada vez.
  * Complexidade Temporal O(n^2).
  * @param citiesaux
- *//*
+ */
+ /*
 void GestaoR::drawCities(const vector<CityCountry> &citiesaux) const {
     bool v = true;
     for (const CityCountry &s: citiesaux) {
@@ -229,7 +355,8 @@ void GestaoR::drawCities(const vector<CityCountry> &citiesaux) const {
  * Complexidade Temporal O(n).
  * @param code
  * @param header
- *//*
+ */
+ /*
 void GestaoR::drawAirport(const string &code, bool header) {
     if (header) {
         cout << "\n+-----+--------------------------------------------------------+---------------------------------+\n"
@@ -268,7 +395,8 @@ void GestaoR::drawAirport(const string &code, bool header) {
  * Desenha todos os aeroportos e chama a função drawAirport para desenhar uma de cada vez.
  * Complexidade Temporal O(n^2).
  * @param airports
- *//*
+ */
+ /*
 void GestaoR::drawAirports(const vector<string> &airports) {
     bool v = true;
     for (int i = 1; i < airports.size(); i++) {
@@ -277,13 +405,13 @@ void GestaoR::drawAirports(const vector<string> &airports) {
     }
     cout << "+-----+--------------------------------------------------------+---------------------------------+\n";
 }*/
-
 /**
  * Desenha uma companhia aérea e identifica se é a 1ª companhia a ser escrito para desenhar o cabeçalho da tabela (parâmetro header).
  * Complexidade Temporal O(n).
  * @param a
  * @param header
- *//*
+ */
+ /*
 void GestaoR::drawAirline(const Airline &a, bool header) const {
     if (header) {
         cout << "\n+-----+------------------------------------------+--------------------------------------+\n"
@@ -321,7 +449,8 @@ void GestaoR::drawAirline(const Airline &a, bool header) const {
  * Desenha todas as companhias aéreas e chama a função drawAirline para desenhar uma de cada vez.
  * Complexidade Temporal O(n^2).
  * @param airlinesaux
- *//*
+ */
+ /*
 void GestaoR::drawAirlines(const vector<Airline> &airlinesaux) const {
     bool v = true;
     for (const Airline &s: airlinesaux) {
@@ -337,7 +466,8 @@ void GestaoR::drawAirlines(const vector<Airline> &airlinesaux) const {
  * @param name
  * @param airline
  * @param header
- *//*
+ */
+ /*
 void GestaoR::drawFlight(const string &name, const string &airline, bool header) const {
     if (header) {
         cout
@@ -369,7 +499,6 @@ void GestaoR::drawFlight(const string &name, const string &airline, bool header)
     }
     cout << "|\n";
 }*/
-
 /**
  * Vai buscar os voos de um aeroporto (parâmetro code) e chama a função drawFlight para desenhar um a um.
  * Complexidade Temporal O(n^2).
@@ -422,12 +551,12 @@ void GestaoR::drawNumberOfAirlines(const string &code) {
     cout << "|\n";
     cout << "+---------+----------+\n";
 }*/
-
 /**
  * Conta os destinos/aeroportos a que se pode chegar a partir de um aeroporto (parâmetro code) e desenha no terminal.
  * Complexidade Temporal O(n).
  * @param code
- *//*
+ */
+ /*
 void GestaoR::drawNumberOfTargets(const string &code) {
     set<string> temp;
     list<pair<int, string>> aux = flightNetwork_.getAirportFlights(code);
@@ -458,12 +587,12 @@ void GestaoR::drawNumberOfTargets(const string &code) {
     cout << "|\n";
     cout << "+---------+-------------+\n";
 }*/
-
 /**
  * Conta os países a que se pode chegar a partir de um aeroporto (parâmetro code) e desenha no terminal.
  * Complexidade Temporal O(n).
  * @param code
- *//*
+ */
+ /*
 void GestaoR::drawNumberOfCountries(const string &code) {
     set<string> temp;
     list<pair<int, string>> aux = flightNetwork_.getAirportFlights(code);
@@ -500,7 +629,8 @@ void GestaoR::drawNumberOfCountries(const string &code) {
  * @param code
  * @param y
  * @return um set de strings com o código dos aeroportos que são acessíveis a partir do inicial.
- *//*
+ */
+ /*
 set<int> GestaoR::yAirports(const string &code, int y) {
     queue<int> search;
     set<int> aux;
