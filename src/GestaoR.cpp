@@ -14,6 +14,9 @@ GestaoR::GestaoR() {
  * Complexidade Temporal O(n) (n é o tamanho do ficheiro retirando o cabeçalho).
  */
 void GestaoR::readStations() {
+    std::vector<std::pair<std::string, std::vector<std::string>>> municipalities;
+    std::vector<std::pair<std::string, std::vector<std::string>>> districts;
+    std::pair<std::string, std::vector<std::string>> temp;
     std::string ficheiro = "../resources/stations.csv";
     std::ifstream ifs1;
     ifs1.open(ficheiro, std::ios::in);
@@ -22,12 +25,18 @@ void GestaoR::readStations() {
     int id = 0;
 
     while (getline(ifs1, segment)) {
-        std::string name, district, municipality, township, line;
+        std::string name, district, municipality, township, line, help;
         std::istringstream stream(segment);
+
         getline(stream, name, ',');
         getline(stream, district, ',');
         getline(stream, municipality, ',');
-        getline(stream, township, ',');
+        if (std::find(segment.begin(), segment.end(), '"') != segment.end()) {
+            getline(stream, help, '"');
+            getline(stream, township, '"');
+            getline(stream, help, ',');
+        }
+        else getline(stream, township, ',');
         getline(stream, line, '\r');
         std::transform(name.begin(), name.end(), name.begin(), ::toupper);
         std::transform(district.begin(), district.end(), district.begin(), ::toupper);
@@ -36,11 +45,46 @@ void GestaoR::readStations() {
         std::transform(line.begin(), line.end(), line.begin(), ::toupper);
 
         if (name.length() > getMaxStationLength()) setMaxStationLength((int)name.length());
+        if (line.length() > getMaxLineLength()) setMaxLineLength((int)line.length());
+
+        if (district != "" && municipality != "") {
+            bool flagM = false;
+            for (auto &par : municipalities) {
+                if (par.first == municipality) {
+                    par.second.push_back(name);
+                    flagM = true;
+                    break;
+                }
+            }
+            if (!flagM) {
+                temp.first = municipality;
+                temp.second.push_back(name);
+                municipalities.push_back(temp);
+            }
+            temp.second.clear();
+            bool flagD = false;
+            for (auto &par : districts) {
+                if (par.first == district) {
+                    par.second.push_back(name);
+                    flagD = true;
+                    break;
+                }
+            }
+            if (!flagD) {
+                temp.first = district;
+                temp.second.push_back(name);
+                districts.push_back(temp);
+            }
+            temp.second.clear();
+        }
 
         railwayNetwork.addVertex(id, name, district, municipality, township, line);
         id++;
     }
     ifs1.close();
+
+    railwayNetwork.setMunicipalities(municipalities);
+    railwayNetwork.setDistricts(districts);
 }
 
 /**
@@ -75,26 +119,84 @@ void GestaoR::readNetwork() {
 
 std::vector<Vertex *> GestaoR::getVertexSet() const { return railwayNetwork.getVertexSet(); }
 
-int GestaoR::edmondsKarp(const std::string &source, const std::string &target) {
+double GestaoR::edmondsKarp(const std::string &source, const std::string &target) {
     int sourceId = railwayNetwork.findVertexName(source);
     int targetId = railwayNetwork.findVertexName(target);
     if (sourceId == -1 || targetId == -1) {
         Menu::estacaoNaoExiste();
-        return 1;
+        return -1.0;
     }
     else if (sourceId == targetId) {
         Menu::estacoesIguais();
-        return 1;
+        return -1.0;
     }
     railwayNetwork.edmondsKarp(sourceId, targetId);
 
     double flow = 0.0;
     for (Edge *edge : railwayNetwork.getVertexSet().at(targetId)->getIncoming()) {
         flow += edge->getFlow();
-        // std::cout << "Orig: " << edge->getOrig()->getName() << " Dest: " << edge->getDest()->getName() << " Flow: " << edge->getFlow() << std::endl;
     }
-    std::cout << "\nO numero maximo de comboios em circulacao entre " << source << " e " << target << " e de " << flow << "." << std::endl;
-    return 0;
+    return flow;
+}
+
+std::pair<std::string, std::string> GestaoR::maxEdmondsKarp() {
+    double flow = 0.0, tempFlow;
+    std::pair<std::string, std::string> result;
+    for (int i = 0; i < getVertexSet().size()-1; i++) {
+        for (int j = i+1; j < getVertexSet().size(); j++) {
+            tempFlow = edmondsKarp(getVertexSet().at(i)->getName(), getVertexSet().at(j)->getName());
+            if (tempFlow > flow) {
+                flow = tempFlow;
+                result.first = getVertexSet().at(i)->getName();
+                result.second = getVertexSet().at(j)->getName();
+            }
+        }
+    }
+    return result;
+}
+
+double GestaoR::maxEKtopK(const std::vector<std::string> &names) {
+    double flow = 0.0;
+    for (int i = 0; i < names.size()-1; i++) {
+        for (int j = i+1; j < names.size(); j++) {
+            flow += edmondsKarp(names.at(i), names.at(j));
+        }
+    }
+    return flow;
+}
+
+void GestaoR::topK(bool mORd) {
+    std::string k;
+    while (true) {
+        std::cout << "\nDefina K: ";
+        std::cin >> k;
+        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
+            Menu::teclaErro();
+            continue;
+        }
+        else if (mORd) {
+            if (std::stoi(k) > railwayNetwork.getMunicipalities().size()) {
+                Menu::numeroMenor();
+                continue;
+            }
+        }
+        else {
+            if (std::stoi(k) > railwayNetwork.getDistricts().size()) {
+                Menu::numeroMenor();
+                continue;
+            }
+        }
+        break;
+    }
+    std::vector<std::pair<std::string, std::vector<std::string>>> muniORdist;
+    if (mORd) muniORdist = railwayNetwork.getMunicipalities();
+    else muniORdist = railwayNetwork.getDistricts();
+    std::sort(muniORdist.begin(), muniORdist.end(), [this](const std::pair<std::string, std::vector<std::string>> &a, const std::pair<std::string, std::vector<std::string>> &b) {
+        return maxEKtopK(a.second) > maxEKtopK(b.second);
+    });
+    for (int i = 0; i < std::stoi(k); i++) {
+        std::cout << muniORdist.at(i).first << std::endl;
+    }
 }
 
 void GestaoR::combineFA(std::vector<std::pair<std::string, std::string>> &edgesNames, std::vector<Vertex *> &vertexs) {
@@ -150,10 +252,9 @@ void GestaoR::fullAdvantage() {
             }
         }
     }
-    for (Edge *edge : maxEdges) {
-        edge->getOrig()->setVisited(false);
-        edge->getDest()->setVisited(false);
-    }
+
+    for (Vertex *vertex : railwayNetwork.getVertexSet()) vertex->setVisited(false);
+
     std::vector<std::pair<std::string, std::string>> edgesNames;
     std::pair<std::string, std::string> edgeName;
     for (Edge *e : maxEdges) {
@@ -177,6 +278,64 @@ void GestaoR::fullAdvantage() {
     });
     drawFullAdvantages(edgesNames);
     std::cout << "\nExistem " << edgesNames.size() << " pares de estacoes com o maximo de comboios a " << max << "." << std::endl;
+}
+
+void GestaoR::dfsMR(Vertex *vertex, Municipality &municipality) {
+    vertex->setVisited(true);
+    municipality.numberOfStations++;
+    for (Edge *edge : vertex->getAdj()) {
+        // TODO VER ISTO
+        if (!edge->getDest()->isVisited() || edge->getDest()->isVisited() && edge->getDest()->getMunicipality() != municipality.municipality) {
+            if (edge->getDest()->getMunicipality() == municipality.municipality) {
+                municipality.numberOfTrains += edge->getWeight();
+                dfsMR(edge->getDest(), municipality);
+            }
+            else {
+                municipality.numberOfTrains += (edge->getWeight()/2);
+            }
+        }
+        else {
+           // municipality.numberOfTrains += (edge->getWeight()/2);
+        }
+    }
+}
+
+std::vector<GestaoR::Municipality> GestaoR::managementRailway() {
+    std::vector<Municipality> municipalities;
+    Municipality municipality;
+    for (Vertex *vertex : railwayNetwork.getVertexSet()) vertex->setVisited(false);
+    for (Vertex *vertex : railwayNetwork.getVertexSet()) {
+        if (!vertex->isVisited() && !vertex->getMunicipality().empty()) {
+            municipality.municipality = vertex->getMunicipality();
+            dfsMR(vertex, municipality);
+            municipalities.push_back(municipality);
+            municipality.numberOfTrains = 0.0;
+            municipality.numberOfStations = 0;
+        }
+    }
+    std::sort(municipalities.begin(), municipalities.end(), [](const Municipality &a, const Municipality &b) {
+        return a.municipality < b.municipality;
+    });
+    std::vector<Municipality> orderMunicipalities;
+    bool flag = true;
+    int currIndex = -1;
+    for (const Municipality &municipality1 : municipalities) {
+        if (currIndex != -1) {
+            if (orderMunicipalities.at(currIndex).municipality != municipality1.municipality) {
+                flag = true;
+            }
+        }
+        if (flag) {
+            orderMunicipalities.push_back(municipality1);
+            flag = false;
+            currIndex++;
+        }
+        else if (orderMunicipalities.at(currIndex).municipality == municipality1.municipality) {
+            orderMunicipalities.at(currIndex).numberOfTrains += municipality1.numberOfTrains;
+            orderMunicipalities.at(currIndex).numberOfStations += municipality1.numberOfStations;
+        }
+    }
+    return orderMunicipalities;
 }
 
 /**
@@ -203,8 +362,11 @@ void GestaoR::drawMenu() {
             "|                       RAILWAY NETWORK                       |\n"
             "+-------------------------------------------------------------+\n"
             "| [1] - Listagens Completas                                   |\n"
-            "| [2] - Maximo n de comboios entre 2 estacoes                 |\n"
+            "| [2] - 2.1                                                   |\n"
             "| [3] - Pares de estacoes com a maior quantidade de comboios  |\n"
+            "| [4] - Top K concelhos que necessitam de maior orcamento     |\n"
+            "| [5] - 2.2                                                   |\n"
+            "| [6] - 2.3                                                   |\n"
             "| [Q] - Sair da aplicacao                                     |\n"
             "+-------------------------------------------------------------+\n";
     std::cout << "\nEscolha a opcao e pressione ENTER:";
@@ -216,20 +378,72 @@ void GestaoR::drawMenu() {
  */
 void GestaoR::drawListagemMenu() {
     std::cout << "\n+-----------------------------------------------------+\n"
-            "|                GESTAO DE AEROPORTOS                 |\n"
-            "+-----------------------------------------------------+\n"
-            "| [1] - Listar Estacoes                               |\n"
-            "| [2] - Listar Ligacoes                               |\n"
-            "| [3] - Listar Ligacoes de uma estacao                |\n"
-            "| [V] - Voltar                                        |\n"
-            "+-----------------------------------------------------+\n";
+                 "|                   RAILWAY NETWORK                   |\n"
+                 "+-----------------------------------------------------+\n"
+                 "| [1] - Listar Estacoes                               |\n"
+                 "| [2] - Listar Ligacoes                               |\n"
+                 "| [3] - Listar Ligacoes de uma estacao                |\n"
+                 "| [V] - Voltar                                        |\n"
+                 "+-----------------------------------------------------+\n";
     std::cout << "\nEscolha a opcao e pressione ENTER:";
 }
 
-void GestaoR::drawStations() const {
-    for (const Vertex *vertex : getVertexSet()) {
-        std::cout << "Id: " << vertex->getId() << " Name: " << vertex->getName() << std::endl;
+/**
+ * Desenha um menu secundário para mais opções.
+ * Complexidade Temporal O(1).
+ */
+void GestaoR::drawBudgetMenu() {
+    std::cout << "\n+-----------------------------------------------------+\n"
+                 "|                   RAILWAY NETWORK                   |\n"
+                 "+-----------------------------------------------------+\n"
+                 "| [1] - Concelhos                                     |\n"
+                 "| [2] - Distritos                                     |\n"
+                 "| [V] - Voltar                                        |\n"
+                 "+-----------------------------------------------------+\n";
+    std::cout << "\nEscolha a opcao e pressione ENTER:";
+}
+
+void GestaoR::drawStation(const Vertex *vertex, bool header) const {
+    if (header) {
+        std::cout << "\n+------------------------------------+--------------------------+\n"
+                     "|          NOME DA ESTACAO           |           LINHA          |\n"
+                     "+------------------------------------+--------------------------+\n";
     }
+    std::cout << "|";
+    std::pair<int, int> pad = auxCenterDraw(getMaxStationLength() - (int) vertex->getName().length(),
+                                            (int) vertex->getName().length() % 2 == 0);
+    for (int f = 0; f < pad.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << vertex->getName();
+    for (int e = 0; e < pad.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|";
+    std::pair<int, int> padCountry = auxCenterDraw(getMaxLineLength() - (int) vertex->getLine().length(),
+                                                   (int) vertex->getLine().length() % 2 == 0);
+    for (int f = 0; f < padCountry.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << vertex->getLine();
+    for (int e = 0; e < padCountry.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|" << "\n";
+}
+
+void GestaoR::drawStations() const {
+    bool header = true;
+    for (const Vertex *vertex : getVertexSet()) {
+        drawStation(vertex, header);
+        header = false;
+    }
+    std::cout << "+------------------------------------+--------------------------+\n";
+
 }
 
 void GestaoR::drawNetwork() const {
@@ -249,7 +463,7 @@ void GestaoR::drawStationNetwork(const std::string &name) {
     }
 }
 
-void GestaoR::drawFullAdvantage(std::pair<std::string, std::string> edgeName, bool header) const {
+void GestaoR::drawFullAdvantage(const std::pair<std::string, std::string> &edgeName, bool header) const {
     if (header) {
         std::cout << "\n+------------------------------------+------------------------------------+\n"
                 "|             ESTACAO 1              |              ESTACAO 2             |\n"
@@ -282,7 +496,7 @@ void GestaoR::drawFullAdvantage(std::pair<std::string, std::string> edgeName, bo
     std::cout << "|" << "\n";
 }
 
-void GestaoR::drawFullAdvantages(std::vector<std::pair<std::string, std::string>> edgesNames) const {
+void GestaoR::drawFullAdvantages(const std::vector<std::pair<std::string, std::string>> &edgesNames) const {
     bool header = true;
     for (const std::pair<std::string, std::string>& edgeName : edgesNames) {
         drawFullAdvantage(edgeName, header);
@@ -291,9 +505,13 @@ void GestaoR::drawFullAdvantages(std::vector<std::pair<std::string, std::string>
     std::cout << "+------------------------------------+------------------------------------+\n";
 }
 
-void GestaoR::setMaxStationLength(int maxLength) { maxStationLenght = maxLength; }
+void GestaoR::setMaxStationLength(int maxLength) { maxStationLength = maxLength; }
 
-int GestaoR::getMaxStationLength() const { return maxStationLenght; }
+void GestaoR::setMaxLineLength(int maxLength) { maxLineLength = maxLength; }
+
+int GestaoR::getMaxStationLength() const { return maxStationLength; }
+
+int GestaoR::getMaxLineLength() const { return maxLineLength; }
 
 /**
  * Desenha uma cidade (parâmetro cc) e identifica se é a 1ª cidade a ser escrita para desenhar o cabeçalho da tabela (parâmetro header).

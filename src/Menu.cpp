@@ -50,6 +50,12 @@ void Menu::semCaminhoPossivel() {
             "+---------------------------------------------------------------------+\n";
 }
 
+void Menu::numeroMenor() {
+    cout << "\n+-------------------------+\n"
+            "|  Insira um numero menor |\n"
+            "+-------------------------+\n";
+}
+
 void Menu::abriuAplicacao() {
     cout << "\n+---------------------------------------------+\n"
             "|          Muito bem-vindo a aplicacao        |\n"

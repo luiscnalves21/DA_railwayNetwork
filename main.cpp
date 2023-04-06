@@ -54,6 +54,7 @@ int main() {
         }
         else if (op == "2") {
             std::string source, target;
+            double flow;
             bool ignoreCin = true;
             while (true) {
                 std::cout << "\nInsira o nome da estacao de partida: ";
@@ -72,13 +73,141 @@ int main() {
                 }
                 std::transform(source.begin(), source.end(), source.begin(), ::toupper);
                 std::transform(target.begin(), target.end(), target.begin(), ::toupper);
-                if (!r.edmondsKarp(source, target)) break;
+                flow = r.edmondsKarp(source, target);
+                if (flow == 0.0) {
+                    std::cout << "\nAs estacoes inseridas nao tem uma ligacao possivel." << std::endl;
+                }
+                else if (flow == -1.0) continue;
+                else {
+                    std::cout << "\nO numero maximo de comboios em circulacao entre " << source << " e " << target << " e de " << flow << "." << std::endl;
+                }
+                break;
             }
             Menu::voltar();
         }
         else if (op == "3") {
             r.fullAdvantage();
             Menu::voltar();
+        }
+        else if (op == "4") {
+            while (true) {
+                GestaoR::drawBudgetMenu();
+                std::string op4;
+                std::cin >> op4;
+                if (op4.length() != 1) {
+                    Menu::teclaErro();
+                    continue;
+                } else if (op4 == "1") {
+                    // manutenção
+                    std::vector<GestaoR::Municipality> municipalities = r.managementRailway();
+                    std::sort(municipalities.begin(), municipalities.end(), [](const GestaoR::Municipality &a, const GestaoR::Municipality &b) {
+                        return a.numberOfStations/a.numberOfTrains < b.numberOfStations/b.numberOfTrains;
+                    });
+                    std::string k;
+                    while (true) {
+                        std::cout << "\nDefina K: ";
+                        std::cin >> k;
+                        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                        else if (std::stoi(k) > municipalities.size()) {
+                            Menu::numeroMenor();
+                            continue;
+                        }
+                        break;
+                    }
+                    for (int i = 0; i < std::stoi(k); i++) {
+                        std::cout << "Name: " << municipalities.at(i).municipality << " ratio: " << municipalities.at(i).numberOfStations/municipalities.at(i).numberOfTrains << std::endl;
+                    }
+                    Menu::voltar();
+                } else if (op4 == "2") {
+                    // compra
+                    std::vector<GestaoR::Municipality> municipalities = r.managementRailway();
+                    std::sort(municipalities.begin(), municipalities.end(), [](const GestaoR::Municipality &a, const GestaoR::Municipality &b) {
+                        return a.numberOfTrains/a.numberOfStations < b.numberOfTrains/b.numberOfStations;
+                    });
+                    std::string k;
+                    while (true) {
+                        std::cout << "\nDefina K: ";
+                        std::cin >> k;
+                        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                        else if (std::stoi(k) > municipalities.size()) {
+                            Menu::numeroMenor();
+                            continue;
+                        }
+                        break;
+                    }
+                    for (int i = 0; i < std::stoi(k); i++) {
+                        double ratio = municipalities.at(i).numberOfTrains/municipalities.at(i).numberOfStations;
+                        std::cout << "\nName: " << municipalities.at(i).municipality << " ratio: " << ratio << std::endl;
+                    }
+                    Menu::voltar();
+                } else if (op4 == "V" || op4 == "v") break;
+            }
+        }
+        else if (op == "5") {
+            std::pair<std::string, std::string> result = r.maxEdmondsKarp();
+            std::cout << "\nO maximo numero de comboios a circular entre duas estacoes e " << r.edmondsKarp(result.first, result.second) << " entre as estacoes de " << result.first << " e " << result.second << "." << std::endl;
+        }
+        else if (op == "6") {
+            while (true) {
+                GestaoR::drawBudgetMenu();
+                std::string op6;
+                std::cin >> op6;
+                if (op6.length() != 1) {
+                    Menu::teclaErro();
+                    continue;
+                } else if (op6 == "1") {
+                    // concelhos
+                    r.topK(true);
+                    /*
+                    std::string k;
+                    while (true) {
+                        std::cout << "\nDefina K: ";
+                        std::cin >> k;
+                        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                        else if (std::stoi(k) > municipalities.size()) {
+                            Menu::numeroMenor();
+                            continue;
+                        }
+                        break;
+                    }
+                    for (int i = 0; i < std::stoi(k); i++) {
+                        std::cout << "Name: " << municipalities.at(i).municipality << " ratio: " << municipalities.at(i).numberOfStations/municipalities.at(i).numberOfTrains << std::endl;
+                    }*/
+                    Menu::voltar();
+                } else if (op6 == "2") {
+                    // distritos
+                    r.topK(false);
+                    /*
+                    std::string k;
+                    while (true) {
+                        std::cout << "\nDefina K: ";
+                        std::cin >> k;
+                        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                        else if (std::stoi(k) > municipalities.size()) {
+                            Menu::numeroMenor();
+                            continue;
+                        }
+                        break;
+                    }
+                    for (int i = 0; i < std::stoi(k); i++) {
+                        double ratio = municipalities.at(i).numberOfTrains/municipalities.at(i).numberOfStations;
+                        std::cout << "\nName: " << municipalities.at(i).municipality << " ratio: " << ratio << std::endl;
+                    }*/
+                    Menu::voltar();
+                } else if (op6 == "V" || op6 == "v") break;
+            }
         }
         else if (op == "q" || op == "Q") {
             Menu::fechouAplicacao();

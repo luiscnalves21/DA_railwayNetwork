@@ -37,10 +37,26 @@ class Graph {
 
         void edmondsKarp(int source, int target);
 
+        void setMunicipalities(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphMunicipalities);
+        void setDistricts(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphDistricts);
+
+        void setMSorted(bool flag);
+        void setDSorted(bool flag);
+
         int getNumVertex() const;
         std::vector<Vertex *> getVertexSet() const;
+        std::vector<std::pair<std::string, std::vector<std::string>>> getMunicipalities() const;
+        std::vector<std::pair<std::string, std::vector<std::string>>> getDistricts() const;
+
+        bool getMSorted() const;
+        bool getDSorted() const;
     protected:
         std::vector<Vertex *> vertexSet;    // vertex set
+        std::vector<std::pair<std::string, std::vector<std::string>>> municipalities;
+        std::vector<std::pair<std::string, std::vector<std::string>>> districts;
+
+        bool mSorted = false;
+        bool dSorted = false;
 
         void testAndVisit(std::queue< Vertex*> &q, Edge *e, Vertex *w, double residual);
         bool findAugmentingPath(Vertex *s, Vertex *t);

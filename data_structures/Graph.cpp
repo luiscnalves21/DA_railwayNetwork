@@ -3,7 +3,7 @@
 #include "Graph.h"
 
 int Graph::getNumVertex() const {
-    return vertexSet.size();
+    return (int)vertexSet.size();
 }
 
 std::vector<Vertex *> Graph::getVertexSet() const {
@@ -33,7 +33,7 @@ int Graph::findVertexName(const std::string &name) const {
 int Graph::findVertexIdx(const int &id) const {
     for (unsigned i = 0; i < vertexSet.size(); i++)
         if (vertexSet[i]->getId() == id)
-            return i;
+            return (int)i;
     return -1;
 }
 /*
@@ -73,6 +73,22 @@ bool Graph::addBidirectionalEdge(const int &sourc, const int &dest, double w, co
     e2->setReverse(e1);
     return true;
 }
+
+void Graph::setMunicipalities(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphMunicipalities) { this->municipalities = graphMunicipalities; }
+
+void Graph::setDistricts(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphDistricts) { this->districts = graphDistricts; }
+
+void Graph::setMSorted(bool flag) { mSorted = flag; }
+
+void Graph::setDSorted(bool flag) { dSorted = flag; }
+
+std::vector<std::pair<std::string, std::vector<std::string>>> Graph::getMunicipalities() const { return municipalities; }
+
+std::vector<std::pair<std::string, std::vector<std::string>>> Graph::getDistricts() const { return districts; }
+
+bool Graph::getMSorted() const { return mSorted; }
+
+bool Graph::getDSorted() const { return dSorted; }
 
 void Graph::edmondsKarp(int source, int target) {
     Vertex* s = findVertexId(source);
