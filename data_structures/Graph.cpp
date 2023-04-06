@@ -78,17 +78,13 @@ void Graph::setMunicipalities(const std::vector<std::pair<std::string, std::vect
 
 void Graph::setDistricts(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphDistricts) { this->districts = graphDistricts; }
 
-void Graph::setMSorted(bool flag) { mSorted = flag; }
-
-void Graph::setDSorted(bool flag) { dSorted = flag; }
-
 std::vector<std::pair<std::string, std::vector<std::string>>> Graph::getMunicipalities() const { return municipalities; }
 
 std::vector<std::pair<std::string, std::vector<std::string>>> Graph::getDistricts() const { return districts; }
 
-bool Graph::getMSorted() const { return mSorted; }
+int Graph::getMSize() const { return municipalities.size(); }
 
-bool Graph::getDSorted() const { return dSorted; }
+int Graph::getDSize() const { return districts.size(); }
 
 void Graph::edmondsKarp(int source, int target) {
     Vertex* s = findVertexId(source);

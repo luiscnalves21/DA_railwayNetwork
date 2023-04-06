@@ -27,7 +27,7 @@ class GestaoR {
 
         std::pair<std::string, std::string> maxEdmondsKarp();
         double maxEKtopK(const std::vector<std::string> &names);
-        void topK(bool mORd);
+        void topK(bool mORd, int k);
         void combineFA(std::vector<std::pair<std::string, std::string>> &edgesNames, std::vector<Vertex *> &vertexs);
         void dfsFA(std::vector<Edge *> &maxEdges, Vertex *vertex, double max, std::vector<Vertex *> &vertexs);
         void fullAdvantage();
@@ -39,6 +39,8 @@ class GestaoR {
         static void drawListagemMenu();
         static void drawBudgetMenu();
 
+        void drawTopK(const std::string &order, bool header, int &pos, bool mORd) const;
+        void drawTopKs(const std::vector<std::pair<std::string, double>> &order, bool mORd, int k) const;
         void drawStation(const Vertex *vertex, bool header) const;
         void drawStations() const;
         void drawNetwork() const;
@@ -47,13 +49,21 @@ class GestaoR {
         void drawFullAdvantages(const std::vector<std::pair<std::string, std::string>> &edgesNames) const;
 
         void setMaxStationLength(int maxLength);
+        void setMaxMunicipalityLength(int maxLength);
+        void setMaxDistrictLength(int maxLength);
         void setMaxLineLength(int maxLength);
 
         int getMaxStationLength() const;
+        int getMaxMunicipalityLength() const;
+        int getMaxDistrictLength() const;
         int getMaxLineLength() const;
-private:
+        int getMSize() const;
+        int getDSize() const;
+    private:
         Graph railwayNetwork;
         int maxStationLength = 0;
+        int maxMunicipalityLength = 0;
+        int maxDistrictLength = 0;
         int maxLineLength = 0;
 };
 

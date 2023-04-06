@@ -45,6 +45,8 @@ void GestaoR::readStations() {
         std::transform(line.begin(), line.end(), line.begin(), ::toupper);
 
         if (name.length() > getMaxStationLength()) setMaxStationLength((int)name.length());
+        if (municipality.length() > getMaxMunicipalityLength()) setMaxMunicipalityLength((int)name.length());
+        if (district.length() > getMaxDistrictLength()) setMaxDistrictLength((int)name.length());
         if (line.length() > getMaxLineLength()) setMaxLineLength((int)line.length());
 
         if (district != "" && municipality != "") {
@@ -165,38 +167,18 @@ double GestaoR::maxEKtopK(const std::vector<std::string> &names) {
     return flow;
 }
 
-void GestaoR::topK(bool mORd) {
-    std::string k;
-    while (true) {
-        std::cout << "\nDefina K: ";
-        std::cin >> k;
-        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
-            Menu::teclaErro();
-            continue;
-        }
-        else if (mORd) {
-            if (std::stoi(k) > railwayNetwork.getMunicipalities().size()) {
-                Menu::numeroMenor();
-                continue;
-            }
-        }
-        else {
-            if (std::stoi(k) > railwayNetwork.getDistricts().size()) {
-                Menu::numeroMenor();
-                continue;
-            }
-        }
-        break;
-    }
+void GestaoR::topK(bool mORd, int k) {
+    std::vector<std::pair<std::string, double>> order;
     std::vector<std::pair<std::string, std::vector<std::string>>> muniORdist;
     if (mORd) muniORdist = railwayNetwork.getMunicipalities();
     else muniORdist = railwayNetwork.getDistricts();
-    std::sort(muniORdist.begin(), muniORdist.end(), [this](const std::pair<std::string, std::vector<std::string>> &a, const std::pair<std::string, std::vector<std::string>> &b) {
-        return maxEKtopK(a.second) > maxEKtopK(b.second);
-    });
-    for (int i = 0; i < std::stoi(k); i++) {
-        std::cout << muniORdist.at(i).first << std::endl;
+    for (auto &i : muniORdist) {
+        order.emplace_back(i.first, maxEKtopK(i.second));
     }
+    std::sort(order.begin(), order.end(), [](const auto &a, const auto &b) {
+        return a.second > b.second;
+    });
+    drawTopKs(order, mORd, k);
 }
 
 void GestaoR::combineFA(std::vector<std::pair<std::string, std::string>> &edgesNames, std::vector<Vertex *> &vertexs) {
@@ -403,6 +385,62 @@ void GestaoR::drawBudgetMenu() {
     std::cout << "\nEscolha a opcao e pressione ENTER:";
 }
 
+void GestaoR::drawTopK(const std::string &order, bool header, int &pos, bool mORd) const {
+    int maxLength = mORd ? getMaxMunicipalityLength() : getMaxDistrictLength();
+    if (maxLength % 2 == 0) maxLength++;
+    if (mORd) {
+        if (header) {
+            std::cout << "\n+------+--------------------------+\n"
+                         "| TOP  |         CONCELHO         |\n"
+                         "+------+--------------------------+\n";
+        }
+    }
+    else {
+        if (header) {
+            std::cout << "\n+------+------------------+\n"
+                         "| TOP  |     DISTRITO     |\n"
+                         "+------+------------------+\n";
+        }
+    }
+    std::cout << "|";
+    std::pair<int, int> pad = auxCenterDraw(5 - (int) std::to_string(pos).length(),
+                                            (int) std::to_string(pos).length() % 2 == 0);
+    for (int f = 0; f < pad.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << pos;
+    for (int e = 0; e < pad.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|";
+    std::pair<int, int> padCountry = auxCenterDraw(maxLength - (int) order.length(),
+                                                   (int) order.length() % 2 == 0);
+    for (int f = 0; f < padCountry.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << order;
+    for (int e = 0; e < padCountry.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|" << "\n";
+}
+
+void GestaoR::drawTopKs(const std::vector<std::pair<std::string, double>> &order, bool mORd, int k) const {
+    bool header = true;
+    int i = 1;
+    for (int j = 0; j < k; j++) {
+        drawTopK(order.at(j).first, header, i, mORd);
+        header = false;
+        i++;
+    }
+    if (mORd) std::cout << "+------+--------------------------+\n";
+    else std::cout << "+------+------------------+\n";
+}
+
 void GestaoR::drawStation(const Vertex *vertex, bool header) const {
     if (header) {
         std::cout << "\n+------------------------------------+--------------------------+\n"
@@ -443,7 +481,6 @@ void GestaoR::drawStations() const {
         header = false;
     }
     std::cout << "+------------------------------------+--------------------------+\n";
-
 }
 
 void GestaoR::drawNetwork() const {
@@ -507,11 +544,23 @@ void GestaoR::drawFullAdvantages(const std::vector<std::pair<std::string, std::s
 
 void GestaoR::setMaxStationLength(int maxLength) { maxStationLength = maxLength; }
 
+void GestaoR::setMaxMunicipalityLength(int maxLength) { maxMunicipalityLength = maxLength; }
+
+void GestaoR::setMaxDistrictLength(int maxLength) { maxDistrictLength = maxLength; }
+
 void GestaoR::setMaxLineLength(int maxLength) { maxLineLength = maxLength; }
 
 int GestaoR::getMaxStationLength() const { return maxStationLength; }
 
+int GestaoR::getMaxMunicipalityLength() const { return maxMunicipalityLength; }
+
+int GestaoR::getMaxDistrictLength() const { return maxDistrictLength; }
+
 int GestaoR::getMaxLineLength() const { return maxLineLength; }
+
+int GestaoR::getMSize() const { return railwayNetwork.getMSize(); }
+
+int GestaoR::getDSize() const { return railwayNetwork.getDSize(); }
 
 /**
  * Desenha uma cidade (parâmetro cc) e identifica se é a 1ª cidade a ser escrita para desenhar o cabeçalho da tabela (parâmetro header).

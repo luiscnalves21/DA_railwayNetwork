@@ -163,8 +163,6 @@ int main() {
                     continue;
                 } else if (op6 == "1") {
                     // concelhos
-                    r.topK(true);
-                    /*
                     std::string k;
                     while (true) {
                         std::cout << "\nDefina K: ";
@@ -173,20 +171,16 @@ int main() {
                             Menu::teclaErro();
                             continue;
                         }
-                        else if (std::stoi(k) > municipalities.size()) {
+                        else if (std::stoi(k) > r.getMSize()) {
                             Menu::numeroMenor();
                             continue;
                         }
                         break;
                     }
-                    for (int i = 0; i < std::stoi(k); i++) {
-                        std::cout << "Name: " << municipalities.at(i).municipality << " ratio: " << municipalities.at(i).numberOfStations/municipalities.at(i).numberOfTrains << std::endl;
-                    }*/
+                    r.topK(true, std::stoi(k));
                     Menu::voltar();
                 } else if (op6 == "2") {
                     // distritos
-                    r.topK(false);
-                    /*
                     std::string k;
                     while (true) {
                         std::cout << "\nDefina K: ";
@@ -195,16 +189,13 @@ int main() {
                             Menu::teclaErro();
                             continue;
                         }
-                        else if (std::stoi(k) > municipalities.size()) {
+                        else if (std::stoi(k) > r.getDSize()) {
                             Menu::numeroMenor();
                             continue;
                         }
                         break;
                     }
-                    for (int i = 0; i < std::stoi(k); i++) {
-                        double ratio = municipalities.at(i).numberOfTrains/municipalities.at(i).numberOfStations;
-                        std::cout << "\nName: " << municipalities.at(i).municipality << " ratio: " << ratio << std::endl;
-                    }*/
+                    r.topK(false, std::stoi(k));
                     Menu::voltar();
                 } else if (op6 == "V" || op6 == "v") break;
             }
