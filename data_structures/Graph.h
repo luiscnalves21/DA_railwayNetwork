@@ -26,7 +26,8 @@ class Graph {
          *  Returns true if successful, and false if a vertex with that content already exists.
          */
         bool addVertex(const int &id, const std::string &name, const std::string &district, const std::string &municipality, const std::string &township, const std::string &line);
-
+        bool removeEdge(const int &source, const int &dest);
+        bool removeVertex(const int &id);
         /*
          * Adds an edge to a graph (this), given the contents of the source and
          * destination vertices and the edge weight (w).

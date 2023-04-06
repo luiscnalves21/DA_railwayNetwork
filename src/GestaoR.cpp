@@ -124,7 +124,11 @@ std::vector<Vertex *> GestaoR::getVertexSet() const { return railwayNetwork.getV
 double GestaoR::edmondsKarp(const std::string &source, const std::string &target) {
     int sourceId = railwayNetwork.findVertexName(source);
     int targetId = railwayNetwork.findVertexName(target);
-    if (sourceId == -1 || targetId == -1) {
+    if (sourceId == -1) {
+        Menu::estacaoNaoEncontrada();
+        return -1.0;
+    }
+    else if (sourceId == -1 || targetId == -1) {
         Menu::estacaoNaoExiste();
         return -1.0;
     }
@@ -320,6 +324,21 @@ std::vector<GestaoR::Municipality> GestaoR::managementRailway() {
     return orderMunicipalities;
 }
 
+double GestaoR::maxFlowOrigin(const std::string &origin) {
+    int id = (int)railwayNetwork.getVertexSet().size();
+    double flow;
+    std::string name = "tempVertex";
+    railwayNetwork.addVertex(id, name, "", "", "", "");
+    for (Vertex *vertex : railwayNetwork.getVertexSet()) {
+        if (vertex->getAdj().size() <= 1 && vertex->getName() != origin) {
+            railwayNetwork.addBidirectionalEdge(id, vertex->getId(), INF, "");
+        }
+    }
+    flow = edmondsKarp(origin, name);
+    railwayNetwork.removeVertex(id);
+    return flow;
+}
+
 /**
  * Função para ajudar a centralizar textos.
  * Complexidade Temporal O(1).
@@ -349,6 +368,7 @@ void GestaoR::drawMenu() {
             "| [4] - Top K concelhos que necessitam de maior orcamento     |\n"
             "| [5] - 2.2                                                   |\n"
             "| [6] - 2.3                                                   |\n"
+            "| [7] - 2.4                                                   |\n"
             "| [Q] - Sair da aplicacao                                     |\n"
             "+-------------------------------------------------------------+\n";
     std::cout << "\nEscolha a opcao e pressione ENTER:";

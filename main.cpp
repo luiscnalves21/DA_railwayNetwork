@@ -50,6 +50,7 @@ int main() {
                     Menu::voltar();
                 }
                 else if (op1 == "V" || op1 == "v") break;
+                else Menu::teclaErro();
             }
         }
         else if (op == "2") {
@@ -147,6 +148,7 @@ int main() {
                     }
                     Menu::voltar();
                 } else if (op4 == "V" || op4 == "v") break;
+                else Menu::teclaErro();
             }
         }
         else if (op == "5") {
@@ -199,6 +201,32 @@ int main() {
                     Menu::voltar();
                 } else if (op6 == "V" || op6 == "v") break;
             }
+        }
+        else if (op == "7") {
+            std::string origin;
+            double flow;
+            bool ignoreCin = true;
+            while (true) {
+                std::cout << "\nInsira o nome da estacao: ";
+                if (ignoreCin) std::cin.ignore();
+                ignoreCin = false;
+                std::getline(std::cin, origin);
+                if (origin.length() < 1) {
+                    Menu::teclaErro();
+                    continue;
+                }
+                std::transform(origin.begin(), origin.end(), origin.begin(), ::toupper);
+                flow = r.maxFlowOrigin(origin);
+                if (flow == 0.0) {
+                    std::cout << "\nA estacao inserida nao tem uma ligacao possivel." << std::endl;
+                }
+                else if (flow == -1.0) continue;
+                else {
+                    std::cout << "\nO numero maximo de comboios em circulacao para " << origin << " e de " << flow << "." << std::endl;
+                }
+                break;
+            }
+            Menu::voltar();
         }
         else if (op == "q" || op == "Q") {
             Menu::fechouAplicacao();

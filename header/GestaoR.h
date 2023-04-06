@@ -33,6 +33,7 @@ class GestaoR {
         void fullAdvantage();
         void dfsMR(Vertex *vertex, Municipality &municipality);
         std::vector<Municipality> managementRailway();
+        double maxFlowOrigin(const std::string &origin);
 
         static std::pair<int, int> auxCenterDraw(int n, bool v);
         static void drawMenu();

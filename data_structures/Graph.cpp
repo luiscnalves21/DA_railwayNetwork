@@ -48,6 +48,30 @@ bool Graph::addVertex(const int &id, const std::string &name, const std::string 
     return true;
 }
 
+bool Graph::removeEdge(const int &source, const int &dest) {
+    Vertex * srcVertex = findVertexId(source);
+    if (srcVertex == nullptr) {
+        return false;
+    }
+    return srcVertex->removeEdge(dest);
+}
+
+bool Graph::removeVertex(const int &id) {
+    for (auto it = vertexSet.begin(); it != vertexSet.end(); it++) {
+        if ((*it)->getId() == id) {
+            auto v = *it;
+            v->removeOutgoingEdges();
+            for (auto u : vertexSet) {
+                u->removeEdge(v->getId());
+            }
+            vertexSet.erase(it);
+            delete v;
+            return true;
+        }
+    }
+    return false;
+}
+
 /*
  * Adds an edge to a graph (this), given the contents of the source and
  * destination vertices and the edge weight (w).
