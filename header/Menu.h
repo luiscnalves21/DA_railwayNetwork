@@ -13,6 +13,6 @@ class Menu {
         static void numeroMenor();
         static void abriuAplicacao();
         static void fechouAplicacao();
-};
+}; 
 
 #endif
