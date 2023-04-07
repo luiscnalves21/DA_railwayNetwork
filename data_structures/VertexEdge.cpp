@@ -17,8 +17,8 @@ Vertex::Vertex(int id, const std::string &name, const std::string &district, con
  * Auxiliary function to add an outgoing edge to a vertex (this),
  * with a given destination vertex (d) and edge weight (w).
  */
-Edge * Vertex::addEdge(Vertex *d, double w, const std::string &service) {
-    auto newEdge = new Edge(this, d, w, service);
+Edge * Vertex::addEdge(Vertex *d, double w, const std::string &service, double cost) {
+    auto newEdge = new Edge(this, d, w, service, cost);
     adj.push_back(newEdge);
     d->incoming.push_back(newEdge);
     return newEdge;
@@ -118,11 +118,13 @@ void Vertex::deleteEdge(Edge *edge) {
 
 /********************** Edge  ****************************/
 
-Edge::Edge(Vertex *orig, Vertex *dest, double w, const std::string &service): orig(orig), dest(dest), weight(w), service(service) {}
+Edge::Edge(Vertex *orig, Vertex *dest, double w, const std::string &service, double cost): orig(orig), dest(dest), weight(w), service(service), cost(cost) {}
 
 Vertex * Edge::getDest() const { return this->dest; }
 
 double Edge::getWeight() const { return this->weight; }
+
+double Edge::getCost() const { return this->cost; }
 
 Vertex * Edge::getOrig() const { return this->orig; }
 

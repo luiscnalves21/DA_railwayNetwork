@@ -33,10 +33,12 @@ class Graph {
          * destination vertices and the edge weight (w).
          * Returns true if successful, and false if the source or destination vertex does not exist.
          */
-        bool addEdge(const int &sourc, const int &dest, double w, const std::string &service);
-        bool addBidirectionalEdge(const int &sourc, const int &dest, double w, const std::string &service);
+        bool addEdge(const int &sourc, const int &dest, double w, const std::string &service, double cost);
+        bool addBidirectionalEdge(const int &sourc, const int &dest, double w, const std::string &service, double cost);
 
         void edmondsKarp(int source, int target);
+
+        void dijkstraShortestPath(const int &s);
 
         void setMunicipalities(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphMunicipalities);
         void setDistricts(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphDistricts);

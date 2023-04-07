@@ -77,22 +77,22 @@ bool Graph::removeVertex(const int &id) {
  * destination vertices and the edge weight (w).
  * Returns true if successful, and false if the source or destination vertex does not exist.
  */
-bool Graph::addEdge(const int &sourc, const int &dest, double w, const std::string &service) {
+bool Graph::addEdge(const int &sourc, const int &dest, double w, const std::string &service, double cost) {
     auto v1 = findVertexId(sourc);
     auto v2 = findVertexId(dest);
     if (v1 == nullptr || v2 == nullptr)
         return false;
-    v1->addEdge(v2, w, service);
+    v1->addEdge(v2, w, service, cost);
     return true;
 }
 
-bool Graph::addBidirectionalEdge(const int &sourc, const int &dest, double w, const std::string &service) {
+bool Graph::addBidirectionalEdge(const int &sourc, const int &dest, double w, const std::string &service, double cost) {
     auto v1 = findVertexId(sourc);
     auto v2 = findVertexId(dest);
     if (v1 == nullptr || v2 == nullptr)
         return false;
-    auto e1 = v1->addEdge(v2, w, service);
-    auto e2 = v2->addEdge(v1, w, service);
+    auto e1 = v1->addEdge(v2, w, service, cost);
+    auto e2 = v2->addEdge(v1, w, service, cost);
     e1->setReverse(e2);
     e2->setReverse(e1);
     return true;
@@ -109,6 +109,36 @@ std::vector<std::pair<std::string, std::vector<std::string>>> Graph::getDistrict
 int Graph::getMSize() const { return municipalities.size(); }
 
 int Graph::getDSize() const { return districts.size(); }
+
+void Graph::dijkstraShortestPath(const int &s) {
+    Vertex * src = findVertexId(s);
+    if (src == nullptr) return;
+
+    for (Vertex *vertex : vertexSet) {
+        vertex->setDist(INF);
+        vertex->setPath(nullptr);
+        vertex->setVisited(false);
+    }
+
+    MutablePriorityQueue<Vertex> q;
+    src->setDist(0);
+    q.insert(src);
+    for (Vertex *vertex : vertexSet)
+        if (vertex->getName() != src->getName())
+            q.insert(vertex);
+
+    while(!q.empty() ) {
+        Vertex *v = q.extractMin();
+        v->setVisited(true);
+        for (Edge *edge : v->getAdj()) {
+            if (!edge->getDest()->isVisited() && edge->getDest()->getDist() > (v->getDist() + edge->getCost())) {
+                edge->getDest()->setDist(v->getDist() + edge->getCost());
+                edge->getDest()->setPath(edge);
+                q.decreaseKey(edge->getDest());
+            }
+        }
+    }
+}
 
 void Graph::edmondsKarp(int source, int target) {
     Vertex* s = findVertexId(source);

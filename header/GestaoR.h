@@ -34,6 +34,7 @@ class GestaoR {
         void dfsMR(Vertex *vertex, Municipality &municipality);
         std::vector<Municipality> managementRailway();
         double maxFlowOrigin(const std::string &origin);
+        double dijkstraShortestPathCost(const std::string &source, const std::string &target, std::vector<std::string> &path, double &minWeigth);
 
         static std::pair<int, int> auxCenterDraw(int n, bool v);
         static void drawMenu();

@@ -39,7 +39,7 @@ class Vertex {
         void setIndegree(unsigned int indegree);
         void setDist(double dist);
         void setPath(Edge *path);
-        Edge * addEdge(Vertex *dest, double w, const std::string &service);
+        Edge * addEdge(Vertex *dest, double w, const std::string &service, double cost);
         bool removeEdge(int destID);
         void removeOutgoingEdges();
 
@@ -71,10 +71,11 @@ class Vertex {
 
 class Edge {
     public:
-        Edge(Vertex *orig, Vertex *dest, double w, const std::string &service);
+        Edge(Vertex *orig, Vertex *dest, double w, const std::string &service, double cost);
 
         Vertex * getDest() const;
         double getWeight() const;
+        double getCost() const;
         bool isSelected() const;
         Vertex * getOrig() const;
         Edge *getReverse() const;
@@ -87,6 +88,7 @@ class Edge {
     protected:
         Vertex * dest; // destination vertex
         double weight; // edge weight, can also be used for capacity
+        double cost; // edge cost
 
         std::string service;
 

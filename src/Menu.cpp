@@ -7,9 +7,9 @@ using namespace std;
  * Caso o input do utilizador não esteja entre os aceitados, apresenta uma mensagem de erro.
  */
 void Menu::teclaErro() {
-    cout << "\n+--------------+\n"
-            "|Input Invalido|\n"
-            "+--------------+\n";
+    cout << "\n+---------------+\n"
+            "| Invalid Input |\n"
+            "+---------------+\n";
 }
 
 /**
@@ -17,57 +17,57 @@ void Menu::teclaErro() {
  */
 void Menu::voltar() {
     string op;
-    cout << "\nPressione [V] para voltar ao Menu:";
+    cout << "\nPress [V] to return to the Menu:";
     cin >> op;
     while (op != "V" && op != "v") {
         teclaErro();
-        cout << "\nPressione [V] para voltar ao Menu:";
+        cout << "\nPress [V] to return to the Menu:";
         cin >> op;
     }
 }
 
 void Menu::estacaoNaoExiste() {
-    cout << "\n+---------------------------------------------------+\n"
-            "| Pelo menos uma das estacoes indicadas nao existe  |\n"
-            "+---------------------------------------------------+\n";
+    cout << "\n+-------------------------------------------------------+\n"
+            "|  At least one of the entered stations does not exist  |\n"
+            "+-------------------------------------------------------+\n";
 }
 
 void Menu::estacaoNaoEncontrada() {
-    cout << "\n+---------------------------------+\n"
-            "|  A estacao indicada nao existe  |\n"
-            "+---------------------------------+\n";
+    cout << "\n+----------------------------------------+\n"
+            "|   The entered station does not exist   |\n"
+            "+----------------------------------------+\n";
 }
 
 void Menu::estacoesIguais() {
-    cout << "\n+------------------------------------+\n"
-            "|  As estacoes inseridas sao iguais  |\n"
-            "+------------------------------------+\n";
+    cout << "\n+-------------------------------------+\n"
+            "|  The stations entered are the same  |\n"
+            "+-------------------------------------+\n";
 }
 
 void Menu::semCaminhoPossivel() {
-    cout << "\n+---------------------------------------------------------------------+\n"
-            "|  Nao existe nenhum caminho possivel entre as estacoes selecionadas  |\n"
-            "+---------------------------------------------------------------------+\n";
+    cout << "\n+-----------------------------------------------------------+\n"
+            "|  There is no possible path between the selected stations  |\n"
+            "+-----------------------------------------------------------+\n";
 }
 
 void Menu::numeroMenor() {
     cout << "\n+-------------------------+\n"
-            "|  Insira um numero menor |\n"
-            "+-------------------------+\n";
+            "|  Enter a smaller number  |\n"
+            "+--------------------------+\n";
 }
 
 void Menu::abriuAplicacao() {
-    cout << "\n+---------------------------------------------+\n"
-            "|          Muito bem-vindo a aplicacao        |\n"
-            "|             de Gestao Ferroviaria           |\n"
-            "|               Espero ser util : )           |\n"
-            "+---------------------------------------------+\n";
+    cout << "\n+-------------------------------------------------------------+\n"
+            "|                       Very welcome to                       |\n"
+            "|                Railway Management application               |\n"
+            "|                    I hope to be useful : )                  |\n"
+            "+-------------------------------------------------------------+\n";
 }
 
 void Menu::fechouAplicacao() {
-    cout << "\n+---------------------------------------------+\n"
-            "|         Muito obrigado por ter usado        |\n"
-            "|              a nossa aplicacao!             |\n"
-            "|               Volte em breve...             |\n"
-            "+---------------------------------------------+\n";
+    cout << "\n+-------------------------------------------------------------+\n"
+            "|                 Thank you very much for using               |\n"
+            "|                        our application!                     |\n"
+            "|                        Come back soon...                    |\n"
+            "+-------------------------------------------------------------+\n";
 }
