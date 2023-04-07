@@ -85,6 +85,7 @@ class Edge {
         void setSelected(bool selected);
         void setReverse(Edge *reverse);
         void setFlow(double flow);
+        void setWeight(double weight);
     protected:
         Vertex * dest; // destination vertex
         double weight; // edge weight, can also be used for capacity

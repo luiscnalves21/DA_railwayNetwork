@@ -141,3 +141,5 @@ void Edge::setSelected(bool selected) { this->selected = selected; }
 void Edge::setReverse(Edge *reverse) { this->reverse = reverse; }
 
 void Edge::setFlow(double flow) { this->flow = flow; }
+
+void Edge::setWeight(double weight) { this->weight = weight; }

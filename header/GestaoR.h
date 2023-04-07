@@ -28,13 +28,14 @@ class GestaoR {
         std::pair<std::string, std::string> maxEdmondsKarp();
         double maxEKtopK(const std::vector<std::string> &names);
         void topK(bool mORd, int k);
-        void combineFA(std::vector<std::pair<std::string, std::string>> &edgesNames, std::vector<Vertex *> &vertexs);
-        void dfsFA(std::vector<Edge *> &maxEdges, Vertex *vertex, double max, std::vector<Vertex *> &vertexs);
-        void fullAdvantage();
-        void dfsMR(Vertex *vertex, Municipality &municipality);
-        std::vector<Municipality> managementRailway();
+
         double maxFlowOrigin(const std::string &origin);
         double dijkstraShortestPathCost(const std::string &source, const std::string &target, std::vector<std::string> &path, double &minWeigth);
+        double existStations(const std::string &source, const std::string &target);
+        double existConnection(const int &sourceId, const int &targetId) const;
+
+        void breakEdge(const std::string &source, const std::string &target);
+        void decreaseEdge(const std::string &source, const std::string &target, double capacity);
 
         static std::pair<int, int> auxCenterDraw(int n, bool v);
         static void drawMenu();
@@ -47,8 +48,6 @@ class GestaoR {
         void drawStations() const;
         void drawNetwork() const;
         void drawStationNetwork(const std::string &name);
-        void drawFullAdvantage(const std::pair<std::string, std::string> &edgeName, bool header) const;
-        void drawFullAdvantages(const std::vector<std::pair<std::string, std::string>> &edgesNames) const;
 
         void setMaxStationLength(int maxLength);
         void setMaxMunicipalityLength(int maxLength);

@@ -28,15 +28,6 @@ int Graph::findVertexName(const std::string &name) const {
 }
 
 /*
- * Finds the index of the vertex with a given content.
- */
-int Graph::findVertexIdx(const int &id) const {
-    for (unsigned i = 0; i < vertexSet.size(); i++)
-        if (vertexSet[i]->getId() == id)
-            return (int)i;
-    return -1;
-}
-/*
  *  Adds a vertex with a given content or info (in) to a graph (this).
  *  Returns true if successful, and false if a vertex with that content already exists.
  */
@@ -98,6 +89,8 @@ bool Graph::addBidirectionalEdge(const int &sourc, const int &dest, double w, co
     return true;
 }
 
+void Graph::setVertexSet(const std::vector<Vertex *> &set) { this->vertexSet = set; }
+
 void Graph::setMunicipalities(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphMunicipalities) { this->municipalities = graphMunicipalities; }
 
 void Graph::setDistricts(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphDistricts) { this->districts = graphDistricts; }
@@ -106,9 +99,9 @@ std::vector<std::pair<std::string, std::vector<std::string>>> Graph::getMunicipa
 
 std::vector<std::pair<std::string, std::vector<std::string>>> Graph::getDistricts() const { return districts; }
 
-int Graph::getMSize() const { return municipalities.size(); }
+int Graph::getMSize() const { return (int)municipalities.size(); }
 
-int Graph::getDSize() const { return districts.size(); }
+int Graph::getDSize() const { return (int)districts.size(); }
 
 void Graph::dijkstraShortestPath(const int &s) {
     Vertex * src = findVertexId(s);
@@ -218,25 +211,4 @@ void Graph::augmentFlowAlongPath(Vertex *s, Vertex *t, double f) {
     }
 }
 
-void deleteMatrix(int **m, int n) {
-    if (m != nullptr) {
-        for (int i = 0; i < n; i++)
-            if (m[i] != nullptr)
-                delete [] m[i];
-        delete [] m;
-    }
-}
-
-void deleteMatrix(double **m, int n) {
-    if (m != nullptr) {
-        for (int i = 0; i < n; i++)
-            if (m[i] != nullptr)
-                delete [] m[i];
-        delete [] m;
-    }
-}
-
-Graph::~Graph() {
-    deleteMatrix(distMatrix, vertexSet.size());
-    deleteMatrix(pathMatrix, vertexSet.size());
-}
+Graph::~Graph() = default;

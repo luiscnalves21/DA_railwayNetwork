@@ -87,75 +87,11 @@ int main() {
             Menu::voltar();
         }
         else if (op == "3") {
-            r.fullAdvantage();
+            std::pair<std::string, std::string> result = r.maxEdmondsKarp();
+            std::cout << "\nThe maximum number of trains running between two stations is " << r.edmondsKarp(result.first, result.second) << " between the stations of " << result.first << " and " << result.second << "." << std::endl;
             Menu::voltar();
         }
         else if (op == "4") {
-            while (true) {
-                GestaoR::drawBudgetMenu();
-                std::string op4;
-                std::cin >> op4;
-                if (op4.length() != 1) {
-                    Menu::teclaErro();
-                    continue;
-                } else if (op4 == "1") {
-                    // manutenção
-                    std::vector<GestaoR::Municipality> municipalities = r.managementRailway();
-                    std::sort(municipalities.begin(), municipalities.end(), [](const GestaoR::Municipality &a, const GestaoR::Municipality &b) {
-                        return a.numberOfStations/a.numberOfTrains < b.numberOfStations/b.numberOfTrains;
-                    });
-                    std::string k;
-                    while (true) {
-                        std::cout << "\nDefine K: ";
-                        std::cin >> k;
-                        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
-                            Menu::teclaErro();
-                            continue;
-                        }
-                        else if (std::stoi(k) > municipalities.size()) {
-                            Menu::numeroMenor();
-                            continue;
-                        }
-                        break;
-                    }
-                    for (int i = 0; i < std::stoi(k); i++) {
-                        std::cout << "Name: " << municipalities.at(i).municipality << " ratio: " << municipalities.at(i).numberOfStations/municipalities.at(i).numberOfTrains << std::endl;
-                    }
-                    Menu::voltar();
-                } else if (op4 == "2") {
-                    // compra
-                    std::vector<GestaoR::Municipality> municipalities = r.managementRailway();
-                    std::sort(municipalities.begin(), municipalities.end(), [](const GestaoR::Municipality &a, const GestaoR::Municipality &b) {
-                        return a.numberOfTrains/a.numberOfStations < b.numberOfTrains/b.numberOfStations;
-                    });
-                    std::string k;
-                    while (true) {
-                        std::cout << "\nDefine K: ";
-                        std::cin >> k;
-                        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
-                            Menu::teclaErro();
-                            continue;
-                        }
-                        else if (std::stoi(k) > municipalities.size()) {
-                            Menu::numeroMenor();
-                            continue;
-                        }
-                        break;
-                    }
-                    for (int i = 0; i < std::stoi(k); i++) {
-                        double ratio = municipalities.at(i).numberOfTrains/municipalities.at(i).numberOfStations;
-                        std::cout << "\nName: " << municipalities.at(i).municipality << " ratio: " << ratio << std::endl;
-                    }
-                    Menu::voltar();
-                } else if (op4 == "V" || op4 == "v") break;
-                else Menu::teclaErro();
-            }
-        }
-        else if (op == "5") {
-            std::pair<std::string, std::string> result = r.maxEdmondsKarp();
-            std::cout << "\nThe maximum number of trains running between two stations is " << r.edmondsKarp(result.first, result.second) << " between the stations of " << result.first << " and " << result.second << "." << std::endl;
-        }
-        else if (op == "6") {
             while (true) {
                 GestaoR::drawBudgetMenu();
                 std::string op6;
@@ -202,7 +138,7 @@ int main() {
                 } else if (op6 == "V" || op6 == "v") break;
             }
         }
-        else if (op == "7") {
+        else if (op == "5") {
             std::string origin;
             double flow;
             bool ignoreCin = true;
@@ -218,7 +154,7 @@ int main() {
                 std::transform(origin.begin(), origin.end(), origin.begin(), ::toupper);
                 flow = r.maxFlowOrigin(origin);
                 if (flow == 0.0) {
-                    std::cout << "\nThe entered station does not have a possible connection." << std::endl;
+                    Menu::semCaminhoEstacao();
                 }
                 else if (flow == -1.0) continue;
                 else {
@@ -228,7 +164,7 @@ int main() {
             }
             Menu::voltar();
         }
-        else if (op == "8") {
+        else if (op == "6") {
             std::string source, target;
             double dijkstra;
             bool ignoreCin = true;
@@ -256,17 +192,104 @@ int main() {
                 else if (dijkstra != -1) {
                     std::reverse(path.begin(), path.end());
                     std::cout << "\nThe maximum number of trains from " << source << " to " << target << " is " << minWeigth << std::endl;
-                    std::cout << "Path: ";
+                    std::cout << "\nPath: ";
                     for (auto &p : path) {
                         if (p != path.at(path.size()-1))
                             std::cout << p << " -> ";
                         else std::cout << p;
                     }
-                    std::cout << "\nThe cost of the path is " << dijkstra << std::endl;
+                    std::cout << "\n\nThe cost of the path is " << dijkstra << std::endl;
                 }
                 Menu::voltar();
                 break;
             }
+        }
+        else if (op == "7" ) {
+            std::string source, target, res;
+            double exist;
+            bool ignoreCin = true;
+            while (true) {
+                std::cout << "\nEnter the name of the departure station: ";
+                if (ignoreCin) std::cin.ignore();
+                ignoreCin = false;
+                std::getline(std::cin, source);
+                if (source.length() < 1) {
+                    Menu::teclaErro();
+                    continue;
+                }
+                std::cout << "\nEnter the name of the arrival station: ";
+                std::getline(std::cin, target);
+                if (target.length() < 1) {
+                    Menu::teclaErro();
+                    continue;
+                }
+                std::transform(source.begin(), source.end(), source.begin(), ::toupper);
+                std::transform(target.begin(), target.end(), target.begin(), ::toupper);
+
+                exist = r.existStations(source, target);
+
+                if (exist == -1.0) {
+                    continue;
+                }
+                else if (exist == 0.0) {
+                    Menu::semCaminhoPossivel();
+                    continue;
+                }
+                else {
+                    while (true) {
+                        std::cout << "\nCapacity: " << exist << " -- " << source << " -> " << target << "\n";
+                        std::cout << "\nDo you want to break the edge or decrease the capacity? (B/D): ";
+                        std::cin >> res;
+                        if (res == "B" || res == "b") {
+                            r.breakEdge(source, target);
+                            break;
+                        } else if (res == "D" || res == "d") {
+                            std::string capacity;
+                            while (true) {
+                                std::cout << "\nEnter the new capacity: ";
+                                std::cin >> capacity;
+                                if (capacity.find_first_not_of("1234567890") != std::string::npos) {
+                                    Menu::teclaErro();
+                                    continue;
+                                } else if (std::stoi(capacity) > exist || std::stoi(capacity) == exist) {
+                                    Menu::numeroMenor();
+                                    continue;
+                                }
+                                break;
+                            }
+                            r.decreaseEdge(source, target, std::stoi(capacity));
+                            break;
+                        } else {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                    }
+                    while (true) {
+                        std::cout << "\nDo you want to add another edge? (Y/N): ";
+                        std::cin >> res;
+                        if (res == "Y" || res == "y") {
+                            ignoreCin = true;
+                            break;
+                        } else if (res == "N" || res == "n") break;
+                        else {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                    }
+                    if (ignoreCin) continue;
+                }
+                Menu::voltar();
+                break;
+            }
+        }
+        else if (op == "8") {
+
+        }
+        else if (op == "r" || op == "R") {
+            r.readStations();
+            r.readNetwork();
+            std::cout << "\nGraph reseted!" << std::endl;
+            Menu::voltar();
         }
         else if (op == "q" || op == "Q") {
             Menu::fechouAplicacao();

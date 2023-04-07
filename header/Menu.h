@@ -10,6 +10,7 @@ class Menu {
         static void estacaoNaoEncontrada();
         static void estacoesIguais();
         static void semCaminhoPossivel();
+        static void semCaminhoEstacao();
         static void numeroMenor();
         static void abriuAplicacao();
         static void fechouAplicacao();

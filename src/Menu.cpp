@@ -50,8 +50,14 @@ void Menu::semCaminhoPossivel() {
             "+-----------------------------------------------------------+\n";
 }
 
+void Menu::semCaminhoEstacao() {
+    cout << "\n+-----------------------------------------------------+\n"
+            "|  There is no possible path to the selected station  |\n"
+            "+-----------------------------------------------------+\n";
+}
+
 void Menu::numeroMenor() {
-    cout << "\n+-------------------------+\n"
+    cout << "\n+--------------------------+\n"
             "|  Enter a smaller number  |\n"
             "+--------------------------+\n";
 }

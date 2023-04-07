@@ -40,6 +40,7 @@ class Graph {
 
         void dijkstraShortestPath(const int &s);
 
+        void setVertexSet(const std::vector<Vertex *> &set);
         void setMunicipalities(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphMunicipalities);
         void setDistricts(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphDistricts);
 
@@ -58,17 +59,6 @@ class Graph {
         bool findAugmentingPath(Vertex *s, Vertex *t);
         double findMinResidualAlongPath(Vertex *s, Vertex *t);
         void augmentFlowAlongPath(Vertex *s, Vertex *t, double f);
-
-        double ** distMatrix = nullptr;   // dist matrix for Floyd-Warshall
-        int **pathMatrix = nullptr;   // path matrix for Floyd-Warshall
-
-        /*
-         * Finds the index of the vertex with a given content.
-         */
-        int findVertexIdx(const int &id) const;
 };
-
-void deleteMatrix(int **m, int n);
-void deleteMatrix(double **m, int n);
 
 #endif
