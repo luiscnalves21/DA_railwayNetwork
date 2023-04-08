@@ -41,134 +41,157 @@ int main() {
                     // listar as ligações de uma estação
                     std::string name;
                     bool ignoreCin = true;
-                    std::cout << "\nEnter station name: ";
-                    if (ignoreCin) std::cin.ignore();
-                    ignoreCin = false;
-                    std::getline(std::cin, name);
-                    std::transform(name.begin(), name.end(), name.begin(), ::toupper);
-                    r.drawStationNetwork(name);
+                    while (true) {
+                        std::cout << "\nEnter station name: ";
+                        if (ignoreCin) std::cin.ignore();
+                        ignoreCin = false;
+                        std::getline(std::cin, name);
+                        std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+                        if (name.length() < 1) {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                        else if (r.existStation(name)) {
+                            r.drawStationNetwork(name);
+                            break;
+                        }
+                        else {
+                            Menu::estacaoNaoEncontrada();
+                            continue;
+                        }
+                    }
                     Menu::voltar();
                 }
-                else if (op1 == "V" || op1 == "v") break;
+                else if (op1 == "B" || op1 == "b") break;
                 else Menu::teclaErro();
             }
         }
         else if (op == "2") {
-            std::string source, target;
-            double flow;
-            bool ignoreCin = true;
             while (true) {
-                std::cout << "\nEnter the name of the departure station: ";
-                if (ignoreCin) std::cin.ignore();
-                ignoreCin = false;
-                std::getline(std::cin, source);
-                if (source.length() < 1) {
+                GestaoR::drawBasicCostMetrics();
+                std::string op2;
+                std::cin >> op2;
+                if (op2.length() != 1) {
                     Menu::teclaErro();
                     continue;
+                } else if (op2 == "1") {
+                    std::string source, target;
+                    double flow;
+                    bool ignoreCin = true;
+                    while (true) {
+                        std::cout << "\nEnter the name of the departure station: ";
+                        if (ignoreCin) std::cin.ignore();
+                        ignoreCin = false;
+                        std::getline(std::cin, source);
+                        if (source.length() < 1) {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                        std::cout << "\nEnter the name of the arrival station: ";
+                        std::getline(std::cin, target);
+                        if (target.length() < 1) {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                        std::transform(source.begin(), source.end(), source.begin(), ::toupper);
+                        std::transform(target.begin(), target.end(), target.begin(), ::toupper);
+                        flow = r.edmondsKarp(source, target);
+                        if (flow == 0.0) {
+                            Menu::semCaminhoPossivel();
+                        } else if (flow == -1.0) continue;
+                        else {
+                            std::cout << "\nThe maximum number of trains running between " << source << " and "
+                                      << target
+                                      << " is " << flow << "." << std::endl;
+                        }
+                        break;
+                    }
+                    Menu::voltar();
+                } else if (op2 == "2") {
+                    std::vector<std::pair<std::string, std::string>> vertexs;
+                    double flow = r.maxEdmondsKarp(vertexs);
+                    std::cout << "\nThe maximum number of trains running between two stations is " << flow
+                              << " between the stations of:\n" << std::endl;
+                    for (auto &result: vertexs) {
+                        std::cout << result.first << " <-> " << result.second << std::endl;
+                    }
+                    Menu::voltar();
+                } else if (op2 == "3") {
+                    while (true) {
+                        GestaoR::drawBudgetMenu();
+                        std::string op6;
+                        std::cin >> op6;
+                        if (op6.length() != 1) {
+                            Menu::teclaErro();
+                            continue;
+                        } else if (op6 == "1") {
+                            // concelhos
+                            std::string k;
+                            while (true) {
+                                std::cout << "\nDefine K: ";
+                                std::cin >> k;
+                                if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
+                                    Menu::teclaErro();
+                                    continue;
+                                } else if (std::stoi(k) > r.getMSize()) {
+                                    Menu::numeroMenor();
+                                    continue;
+                                }
+                                break;
+                            }
+                            r.topK(true, std::stoi(k));
+                            Menu::voltar();
+                        } else if (op6 == "2") {
+                            // distritos
+                            std::string k;
+                            while (true) {
+                                std::cout << "\nDefine K: ";
+                                std::cin >> k;
+                                if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
+                                    Menu::teclaErro();
+                                    continue;
+                                } else if (std::stoi(k) > r.getDSize()) {
+                                    Menu::numeroMenor();
+                                    continue;
+                                }
+                                break;
+                            }
+                            r.topK(false, std::stoi(k));
+                            Menu::voltar();
+                        } else if (op6 == "B" || op6 == "b") break;
+                    }
+                } else if (op2 == "4") {
+                    std::string origin;
+                    double flow;
+                    bool ignoreCin = true;
+                    while (true) {
+                        std::cout << "\nEnter station name: ";
+                        if (ignoreCin) std::cin.ignore();
+                        ignoreCin = false;
+                        std::getline(std::cin, origin);
+                        if (origin.length() < 1) {
+                            Menu::teclaErro();
+                            continue;
+                        }
+                        std::transform(origin.begin(), origin.end(), origin.begin(), ::toupper);
+                        flow = r.maxFlowOrigin(origin);
+                        if (flow == 0.0) {
+                            Menu::semCaminhoEstacao();
+                        } else if (flow == -1.0) continue;
+                        else {
+                            std::cout << "\nThe maximum number of trains running for " << origin << " is " << flow
+                                      << "."
+                                      << std::endl;
+                        }
+                        break;
+                    }
+                    Menu::voltar();
                 }
-                std::cout << "\nEnter the name of the arrival station: ";
-                std::getline(std::cin, target);
-                if (target.length() < 1) {
-                    Menu::teclaErro();
-                    continue;
-                }
-                std::transform(source.begin(), source.end(), source.begin(), ::toupper);
-                std::transform(target.begin(), target.end(), target.begin(), ::toupper);
-                flow = r.edmondsKarp(source, target);
-                if (flow == 0.0) {
-                    Menu::semCaminhoPossivel();
-                }
-                else if (flow == -1.0) continue;
-                else {
-                    std::cout << "\nThe maximum number of trains running between " << source << " and " << target << " is " << flow << "." << std::endl;
-                }
-                break;
+                else if (op2 == "b" || op == "B") break;
+                else Menu::teclaErro();
             }
-            Menu::voltar();
         }
         else if (op == "3") {
-            std::vector<std::pair<std::string, std::string>> vertexs;
-            double flow = r.maxEdmondsKarp(vertexs);
-            std::cout << "\nThe maximum number of trains running between two stations is " << flow << " between the stations of: " << std::endl;
-            for (auto &result : vertexs) {
-                 std::cout << result.first << " -> " << result.second << std::endl;
-            }
-            Menu::voltar();
-        }
-        else if (op == "4") {
-            while (true) {
-                GestaoR::drawBudgetMenu();
-                std::string op6;
-                std::cin >> op6;
-                if (op6.length() != 1) {
-                    Menu::teclaErro();
-                    continue;
-                } else if (op6 == "1") {
-                    // concelhos
-                    std::string k;
-                    while (true) {
-                        std::cout << "\nDefine K: ";
-                        std::cin >> k;
-                        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
-                            Menu::teclaErro();
-                            continue;
-                        }
-                        else if (std::stoi(k) > r.getMSize()) {
-                            Menu::numeroMenor();
-                            continue;
-                        }
-                        break;
-                    }
-                    r.topK(true, std::stoi(k));
-                    Menu::voltar();
-                } else if (op6 == "2") {
-                    // distritos
-                    std::string k;
-                    while (true) {
-                        std::cout << "\nDefine K: ";
-                        std::cin >> k;
-                        if (k.find_first_not_of("1234567890") != std::string::npos || k == "0") {
-                            Menu::teclaErro();
-                            continue;
-                        }
-                        else if (std::stoi(k) > r.getDSize()) {
-                            Menu::numeroMenor();
-                            continue;
-                        }
-                        break;
-                    }
-                    r.topK(false, std::stoi(k));
-                    Menu::voltar();
-                } else if (op6 == "V" || op6 == "v") break;
-            }
-        }
-        else if (op == "5") {
-            std::string origin;
-            double flow;
-            bool ignoreCin = true;
-            while (true) {
-                std::cout << "\nEnter station name: ";
-                if (ignoreCin) std::cin.ignore();
-                ignoreCin = false;
-                std::getline(std::cin, origin);
-                if (origin.length() < 1) {
-                    Menu::teclaErro();
-                    continue;
-                }
-                std::transform(origin.begin(), origin.end(), origin.begin(), ::toupper);
-                flow = r.maxFlowOrigin(origin);
-                if (flow == 0.0) {
-                    Menu::semCaminhoEstacao();
-                }
-                else if (flow == -1.0) continue;
-                else {
-                    std::cout << "\nThe maximum number of trains running for " << origin << " is " << flow << "." << std::endl;
-                }
-                break;
-            }
-            Menu::voltar();
-        }
-        else if (op == "6") {
             std::string source, target;
             double dijkstra;
             bool ignoreCin = true;
@@ -204,11 +227,12 @@ int main() {
                     }
                     std::cout << "\n\nThe cost of the path is " << dijkstra << std::endl;
                 }
+                else continue;
                 Menu::voltar();
                 break;
             }
         }
-        else if (op == "7" ) {
+        else if (op == "4" ) {
             // calcula o fluxo maximo entre todas as estações antes usando o 2.4
             std::vector<std::pair<std::string, double>> maxFlowBefore, maxFlowAfter, affectedStations;
             for (auto &station : r.getVertexSet()) {
@@ -313,7 +337,7 @@ int main() {
                             std::cout << "\nThe most affected stations are: " << std::endl;
                             for (auto &affectedStation: affectedStations) {
                                 if (affectedStation.second != 0) {
-                                    std::cout << "\nStation: " << affectedStation.first << " -- Difference: "
+                                    std::cout << "\n" << affectedStation.first << " -- Difference: "
                                               << affectedStation.second << std::endl;
                                 }
                             }

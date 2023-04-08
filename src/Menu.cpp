@@ -17,11 +17,11 @@ void Menu::teclaErro() {
  */
 void Menu::voltar() {
     string op;
-    cout << "\nPress [V] to return to the Menu:";
+    cout << "\nPress [B] to return to the Menu:";
     cin >> op;
-    while (op != "V" && op != "v") {
+    while (op != "B" && op != "b") {
         teclaErro();
-        cout << "\nPress [V] to return to the Menu:";
+        cout << "\nPress [B] to return to the Menu:";
         cin >> op;
     }
 }

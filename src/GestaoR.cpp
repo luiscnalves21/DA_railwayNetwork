@@ -132,7 +132,7 @@ double GestaoR::edmondsKarp(const std::string &source, const std::string &target
         Menu::estacaoNaoEncontrada();
         return -1.0;
     }
-    else if (sourceId == -1 || targetId == -1) {
+    else if (targetId == -1) {
         Menu::estacaoNaoExiste();
         return -1.0;
     }
@@ -248,6 +248,10 @@ double GestaoR::dijkstraShortestPathCost(const std::string &source, const std::s
     return cost;
 }
 
+bool GestaoR::existStation(const std::string &source) {
+    return railwayNetwork.findVertexName(source) != -1;
+}
+
 double GestaoR::existStations(const std::string &source, const std::string &target) {
     int sourceId = railwayNetwork.findVertexName(source);
     int targetId = railwayNetwork.findVertexName(target);
@@ -335,14 +339,24 @@ void GestaoR::drawMenu() {
                  "|                     RAILWAY MANAGEMENT                      |\n"
                  "+-------------------------------------------------------------+\n"
                  "| [1] - Complete Listings                                     |\n"
-                 "| [2] - 2.1 (max-flow)                                        |\n"
-                 "| [3] - 2.2 (max-flow pair)                                   |\n"
-                 "| [4] - 2.3 (top-k)                                           |\n"
-                 "| [5] - 2.4 (max-trains-entire-network)                       |\n"
-                 "| [6] - 3.1 (cost)                                            |\n"
-                 "| [7] - 4.1 (failures) 4.2 (repport)                          |\n"
+                 "| [2] - Basic Service Metrics                                 |\n"
+                 "| [3] - Operation Cost Optimization                           |\n"
+                 "| [4] - Reduced Connectivity & Report                         |\n"
                  "| [R] - Reset Graph                                           |\n"
                  "| [Q] - Exit the application                                  |\n"
+                 "+-------------------------------------------------------------+\n";
+    std::cout << "\nChoose the option and press ENTER:";
+}
+
+void GestaoR::drawBasicCostMetrics() {
+    std::cout << "\n+-------------------------------------------------------------+\n"
+                 "|                    BASIC SERVICE METRICS                    |\n"
+                 "+-------------------------------------------------------------+\n"
+                 "| [1] - Max-Flow Between Two Stations                         |\n"
+                 "| [2] - Pair of Stations - Most Amount of Trains              |\n"
+                 "| [3] - Purchasing & Maintenance - Budget                     |\n"
+                 "| [4] - Max Number of Trains - Entire Railway Grid            |\n"
+                 "| [B] - Go Back                                               |\n"
                  "+-------------------------------------------------------------+\n";
     std::cout << "\nChoose the option and press ENTER:";
 }
@@ -358,7 +372,7 @@ void GestaoR::drawListagemMenu() {
                  "| [1] - List stations                                         |\n"
                  "| [2] - List connections                                      |\n"
                  "| [3] - List station connections                              |\n"
-                 "| [V] - Go Back                                               |\n"
+                 "| [B] - Go Back                                               |\n"
                  "+-------------------------------------------------------------+\n";
     std::cout << "\nChoose the option and press ENTER:";
 }
@@ -373,7 +387,7 @@ void GestaoR::drawBudgetMenu() {
                  "+-------------------------------------------------------------+\n"
                  "| [1] - Municipalities                                        |\n"
                  "| [2] - Districts                                             |\n"
-                 "| [V] - Go Back                                                |\n"
+                 "| [B] - Go Back                                                |\n"
                  "+-------------------------------------------------------------+\n";
     std::cout << "\nChoose the option and press ENTER:";
 }

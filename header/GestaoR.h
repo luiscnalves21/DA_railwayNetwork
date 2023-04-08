@@ -10,12 +10,6 @@
 
 class GestaoR {
     public:
-        struct Municipality {
-            std::string municipality;
-            double numberOfTrains = 0.0;
-            int numberOfStations = 0;
-        };
-
         GestaoR();
 
         void readStations();
@@ -31,6 +25,7 @@ class GestaoR {
 
         double maxFlowOrigin(const std::string &origin);
         double dijkstraShortestPathCost(const std::string &source, const std::string &target, std::vector<std::string> &path, double &minWeigth);
+        bool existStation(const std::string &source);
         double existStations(const std::string &source, const std::string &target);
         double existConnection(const int &sourceId, const int &targetId) const;
 
@@ -39,6 +34,7 @@ class GestaoR {
 
         static std::pair<int, int> auxCenterDraw(int n, bool v);
         static void drawMenu();
+        static void drawBasicCostMetrics();
         static void drawListagemMenu();
         static void drawBudgetMenu();
 
