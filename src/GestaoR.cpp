@@ -1,6 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cmath>
 
 #include "../header/GestaoR.h"
 #include "../header/Menu.h"
@@ -218,7 +219,7 @@ double GestaoR::dijkstraShortestPathCost(const std::string &source, const std::s
         Menu::estacaoNaoEncontrada();
         return -1.0;
     }
-    else if (sourceId == -1 || targetId == -1) {
+    else if (targetId == -1) {
         Menu::estacaoNaoExiste();
         return -1.0;
     }
@@ -248,29 +249,12 @@ double GestaoR::dijkstraShortestPathCost(const std::string &source, const std::s
     return cost;
 }
 
-bool GestaoR::existStation(const std::string &source) {
-    return railwayNetwork.findVertexName(source) != -1;
-}
+bool GestaoR::existStation(const std::string &name) { return railwayNetwork.findVertexName(name) != -1; }
 
-double GestaoR::existStations(const std::string &source, const std::string &target) {
+double GestaoR::existConnection(const std::string &source, const std::string &target) const {
     int sourceId = railwayNetwork.findVertexName(source);
     int targetId = railwayNetwork.findVertexName(target);
-    if (sourceId == -1) {
-        Menu::estacaoNaoEncontrada();
-        return -1.0;
-    }
-    else if (sourceId == -1 || targetId == -1) {
-        Menu::estacaoNaoExiste();
-        return -1.0;
-    }
-    else if (sourceId == targetId) {
-        Menu::estacoesIguais();
-        return -1.0;
-    }
-    return existConnection(sourceId, targetId);
-}
 
-double GestaoR::existConnection(const int &sourceId, const int &targetId) const {
     for (Edge *edge : getVertexSet().at(sourceId)->getAdj()) {
         if (edge->getDest()->getId() == targetId) {
             return edge->getWeight();
@@ -279,22 +263,21 @@ double GestaoR::existConnection(const int &sourceId, const int &targetId) const 
     return 0.0;
 }
 
-void GestaoR::breakEdge(const std::string &source, const std::string &target) {
+bool GestaoR::showAdjacents(const std::string &source) {
     int sourceId = railwayNetwork.findVertexName(source);
-    int targetId = railwayNetwork.findVertexName(target);
-    for (Edge *edge: railwayNetwork.getVertexSet().at(sourceId)->getAdj()) {
-        if (edge->getDest()->getName() == target) {
-            edge->setWeight(0.0);
-            break;
-        }
+    if (sourceId == -1) {
+        Menu::estacaoNaoEncontrada();
+        return false;
     }
-    for (Edge *edge: railwayNetwork.getVertexSet().at(targetId)->getAdj()) {
-        if (edge->getDest()->getName() == source) {
-            edge->setWeight(0.0);
-            break;
-        }
+    int counter = 0;
+    for (Edge *edge : getVertexSet().at(sourceId)->getAdj())
+        if (edge->getWeight() != 0.0) counter++;
+    if (counter == 0) {
+        std::cout << "\n--- There are no destinations/connections from " << source << " ---" << std::endl;
+        return false;
     }
-    std::cout << "\nEdge " << source << " - " << target << " broken." << std::endl;
+    drawConnections(sourceId);
+    return true;
 }
 
 void GestaoR::decreaseEdge(const std::string &source, const std::string &target, double capacity) {
@@ -307,12 +290,13 @@ void GestaoR::decreaseEdge(const std::string &source, const std::string &target,
         }
     }
     for (Edge *edge: railwayNetwork.getVertexSet().at(targetId)->getAdj()) {
-        if (edge->getDest()->getName() == target) {
+        if (edge->getDest()->getName() == source) {
             edge->setWeight(capacity);
             break;
         }
     }
-    std::cout << "\nEdge " << source << " - " << target << " decreased." << std::endl;
+    if (capacity == 0.0) std::cout << "\nEdge " << source << " - " << target << " broken." << std::endl;
+    else std::cout << "\nEdge " << source << " - " << target << " decreased." << std::endl;
 }
 
 /**
@@ -369,9 +353,8 @@ void GestaoR::drawListagemMenu() {
     std::cout << "\n+-------------------------------------------------------------+\n"
                  "|                     RAILWAY MANAGEMENT                      |\n"
                  "+-------------------------------------------------------------+\n"
-                 "| [1] - List stations                                         |\n"
-                 "| [2] - List connections                                      |\n"
-                 "| [3] - List station connections                              |\n"
+                 "| [1] - List Stations                                         |\n"
+                 "| [2] - List Station Connections                              |\n"
                  "| [B] - Go Back                                               |\n"
                  "+-------------------------------------------------------------+\n";
     std::cout << "\nChoose the option and press ENTER:";
@@ -387,7 +370,7 @@ void GestaoR::drawBudgetMenu() {
                  "+-------------------------------------------------------------+\n"
                  "| [1] - Municipalities                                        |\n"
                  "| [2] - Districts                                             |\n"
-                 "| [B] - Go Back                                                |\n"
+                 "| [B] - Go Back                                               |\n"
                  "+-------------------------------------------------------------+\n";
     std::cout << "\nChoose the option and press ENTER:";
 }
@@ -448,7 +431,7 @@ void GestaoR::drawTopKs(const std::vector<std::pair<std::string, double>> &order
     else std::cout << "+------+------------------+\n";
 }
 
-void GestaoR::drawStation(const Vertex *vertex, bool header) const {
+void GestaoR::drawStationAndLine(const Vertex *vertex, bool header) const {
     if (header) {
         std::cout << "\n+------------------------------------+--------------------------+\n"
                      "|                NAME                |           LINE          |\n"
@@ -481,30 +464,119 @@ void GestaoR::drawStation(const Vertex *vertex, bool header) const {
     std::cout << "|" << "\n";
 }
 
-void GestaoR::drawStations() const {
+void GestaoR::drawStationsAndLine() const {
     bool header = true;
     for (const Vertex *vertex : getVertexSet()) {
-        drawStation(vertex, header);
+        drawStationAndLine(vertex, header);
         header = false;
     }
     std::cout << "+------------------------------------+--------------------------+\n";
 }
 
-void GestaoR::drawNetwork() const {
-    for (const Vertex *vertex : getVertexSet()) {
-        std::cout << "Name: " << vertex->getName() << " " << vertex->getAdj().size() << std::endl;
-        for (Edge *edge : vertex->getAdj()) {
-            std::cout << "Destination: " << edge->getDest()->getName() << " Capacity: " << edge->getWeight() << " Service: " << edge->getService() << std::endl;
-        }
+void GestaoR::drawConnection(const Edge *edge, bool header) const {
+    if (header) {
+        std::cout << "\n+------------------------------------+------------------+------+\n"
+                     "|                          DESTINATIONS                        |\n"
+                     "+------------------------------------+------------------+------+\n"
+                     "|                NAME                |     SERVICE      | CAP  |\n"
+                     "+------------------------------------+------------------+------+\n";
     }
+    std::cout << "|";
+    std::pair<int, int> pad = auxCenterDraw(getMaxStationLength() - (int) edge->getDest()->getName().length(),
+                                            (int) edge->getDest()->getName().length() % 2 == 0);
+    for (int f = 0; f < pad.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << edge->getDest()->getName();
+    for (int e = 0; e < pad.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|";
+    pad = auxCenterDraw(17 - (int) edge->getService().length(),
+                                                   (int) edge->getService().length() % 2 == 0);
+    for (int f = 0; f < pad.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << edge->getService();
+    for (int e = 0; e < pad.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|";
+    std::string capacity = std::to_string(static_cast<int>(std::floor(edge->getWeight())));
+    pad = auxCenterDraw(5 - (int) capacity.length(),
+                                                   (int) capacity.length() % 2 == 0);
+    for (int f = 0; f < pad.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << capacity;
+    for (int e = 0; e < pad.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|" << "\n";
 }
 
-void GestaoR::drawStationNetwork(const std::string &name) {
-    Vertex *vertex = railwayNetwork.findVertexId(railwayNetwork.findVertexName(name));
-    if (vertex == nullptr) return;
-    for (Edge *edge : vertex->getAdj()) {
-        std::cout << "Destination: " << edge->getDest()->getName() << " Capacity: " << edge->getWeight() << std::endl;
+void GestaoR::drawConnections(const int &sourceId) const {
+    bool header = true;
+    for (const Edge *edge : getVertexSet().at(sourceId)->getAdj()) {
+        if (edge->getWeight() != 0) {
+            drawConnection(edge, header);
+            header = false;
+        }
     }
+    std::cout << "+------------------------------------+------------------+------+\n";
+}
+
+void GestaoR::drawReportedStation(const std::pair<std::string, double> &par, bool header) const {
+    if (header) {
+        std::cout << "\n+-------------------------------------------------+\n"
+                     "|              MOST AFFECTED STATIONS             |\n"
+                     "+------------------------------------+------------+\n"
+                     "|                NAME                | DIFFERENCE |\n"
+                     "+------------------------------------+------------+\n";
+    }
+    std::cout << "|";
+    std::pair<int, int> pad = auxCenterDraw(getMaxStationLength() - (int) par.first.length(),
+                                            (int) par.first.length() % 2 == 0);
+    for (int f = 0; f < pad.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << par.first;
+    for (int e = 0; e < pad.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|";
+    std::pair<int, int> padCountry = auxCenterDraw(11 - (int) std::to_string((int)par.second).length(),
+                                                   (int) std::to_string((int)par.second).length() % 2 == 0);
+    for (int f = 0; f < padCountry.first; f++) {
+        std::cout << " ";
+        ++f;
+    }
+    std::cout << std::to_string((int)par.second);
+    for (int e = 0; e < padCountry.second; e++) {
+        std::cout << " ";
+        ++e;
+    }
+    std::cout << "|" << "\n";
+}
+
+void GestaoR::drawReportedStations(const std::vector<std::pair<std::string, double>> &affectedStations) const {
+    bool header = true;
+    for (const auto &par : affectedStations) {
+        if (par.second != 0.0) {
+            drawReportedStation(par, header);
+            header = false;
+        }
+    }
+    std::cout << "+------------------------------------+------------+\n";
+
 }
 
 void GestaoR::setMaxStationLength(int maxLength) { maxStationLength = maxLength; }

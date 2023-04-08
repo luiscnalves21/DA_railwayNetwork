@@ -29,15 +29,10 @@ int main() {
                     continue;
                 } else if (op1 == "1") {
                     // listar as estações
-                    r.drawStations();
+                    r.drawStationsAndLine();
                     Menu::voltar();
                 }
                 else if (op1 == "2") {
-                    // listar as ligações
-                    r.drawNetwork();
-                    Menu::voltar();
-                }
-                else if (op1 == "3") {
                     // listar as ligações de uma estação
                     std::string name;
                     bool ignoreCin = true;
@@ -52,7 +47,8 @@ int main() {
                             continue;
                         }
                         else if (r.existStation(name)) {
-                            r.drawStationNetwork(name);
+                            //r.drawStationConnections(name);
+                            r.showAdjacents(name);
                             break;
                         }
                         else {
@@ -74,7 +70,8 @@ int main() {
                 if (op2.length() != 1) {
                     Menu::teclaErro();
                     continue;
-                } else if (op2 == "1") {
+                }
+                else if (op2 == "1") {
                     std::string source, target;
                     double flow;
                     bool ignoreCin = true;
@@ -107,7 +104,8 @@ int main() {
                         break;
                     }
                     Menu::voltar();
-                } else if (op2 == "2") {
+                }
+                else if (op2 == "2") {
                     std::vector<std::pair<std::string, std::string>> vertexs;
                     double flow = r.maxEdmondsKarp(vertexs);
                     std::cout << "\nThe maximum number of trains running between two stations is " << flow
@@ -116,7 +114,8 @@ int main() {
                         std::cout << result.first << " <-> " << result.second << std::endl;
                     }
                     Menu::voltar();
-                } else if (op2 == "3") {
+                }
+                else if (op2 == "3") {
                     while (true) {
                         GestaoR::drawBudgetMenu();
                         std::string op6;
@@ -160,7 +159,8 @@ int main() {
                             Menu::voltar();
                         } else if (op6 == "B" || op6 == "b") break;
                     }
-                } else if (op2 == "4") {
+                }
+                else if (op2 == "4") {
                     std::string origin;
                     double flow;
                     bool ignoreCin = true;
@@ -250,21 +250,28 @@ int main() {
                     Menu::teclaErro();
                     continue;
                 }
+                std::transform(source.begin(), source.end(), source.begin(), ::toupper);
+                if (!r.showAdjacents(source)) continue;
                 std::cout << "\nEnter the name of the arrival station: ";
                 std::getline(std::cin, target);
                 if (target.length() < 1) {
                     Menu::teclaErro();
                     continue;
                 }
-                std::transform(source.begin(), source.end(), source.begin(), ::toupper);
                 std::transform(target.begin(), target.end(), target.begin(), ::toupper);
 
-                exist = r.existStations(source, target);
-
-                if (exist == -1.0) {
+                if (source == target) {
+                    Menu::estacoesIguais();
                     continue;
                 }
-                else if (exist == 0.0) {
+                else if (!r.existStation(target)) {
+                    Menu::estacaoNaoEncontrada();
+                    continue;
+                }
+                //exist connection
+                exist = r.existConnection(source, target);
+
+                if (exist == 0.0) {
                     Menu::semCaminhoPossivel();
                     continue;
                 }
@@ -274,7 +281,7 @@ int main() {
                         std::cout << "\nDo you want to break the edge or decrease the capacity? (B/D): ";
                         std::cin >> res;
                         if (res == "B" || res == "b") {
-                            r.breakEdge(source, target);
+                            r.decreaseEdge(source, target, 0.0);
                             break;
                         } else if (res == "D" || res == "d") {
                             std::string capacity;
@@ -332,15 +339,9 @@ int main() {
                                   [](const std::pair<std::string, double> &a, const std::pair<std::string, double> &b) {
                                       return a.second > b.second;
                                   });
-                        // display the first 5
+                        // display
                         if (affectedStations.at(0).second != 0) {
-                            std::cout << "\nThe most affected stations are: " << std::endl;
-                            for (auto &affectedStation: affectedStations) {
-                                if (affectedStation.second != 0) {
-                                    std::cout << "\n" << affectedStation.first << " -- Difference: "
-                                              << affectedStation.second << std::endl;
-                                }
-                            }
+                            r.drawReportedStations(affectedStations);
                         }
                         else std::cout << "\nNo stations were affected!" << std::endl;
                         break;
@@ -358,7 +359,6 @@ int main() {
             r.readStations();
             r.readNetwork();
             std::cout << "\nGraph reseted!" << std::endl;
-            Menu::voltar();
         }
         else if (op == "q" || op == "Q") {
             Menu::fechouAplicacao();

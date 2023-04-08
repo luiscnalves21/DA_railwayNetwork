@@ -26,10 +26,9 @@ class GestaoR {
         double maxFlowOrigin(const std::string &origin);
         double dijkstraShortestPathCost(const std::string &source, const std::string &target, std::vector<std::string> &path, double &minWeigth);
         bool existStation(const std::string &source);
-        double existStations(const std::string &source, const std::string &target);
-        double existConnection(const int &sourceId, const int &targetId) const;
+        double existConnection(const std::string &source, const std::string &target) const;
+        bool showAdjacents(const std::string& source);
 
-        void breakEdge(const std::string &source, const std::string &target);
         void decreaseEdge(const std::string &source, const std::string &target, double capacity);
 
         static std::pair<int, int> auxCenterDraw(int n, bool v);
@@ -40,10 +39,12 @@ class GestaoR {
 
         void drawTopK(const std::string &order, bool header, int &pos, bool mORd) const;
         void drawTopKs(const std::vector<std::pair<std::string, double>> &order, bool mORd, int k) const;
-        void drawStation(const Vertex *vertex, bool header) const;
-        void drawStations() const;
-        void drawNetwork() const;
-        void drawStationNetwork(const std::string &name);
+        void drawStationAndLine(const Vertex *vertex, bool header) const;
+        void drawStationsAndLine() const;
+        void drawConnection(const Edge *edge, bool header) const;
+        void drawConnections(const int &sourceId) const;
+        void drawReportedStation(const std::pair<std::string, double> &par, bool header) const;
+        void drawReportedStations(const std::vector<std::pair<std::string, double>> &affectedStations) const;
 
         void setMaxStationLength(int maxLength);
         void setMaxMunicipalityLength(int maxLength);
