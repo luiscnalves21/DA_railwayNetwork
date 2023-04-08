@@ -87,8 +87,12 @@ int main() {
             Menu::voltar();
         }
         else if (op == "3") {
-            std::pair<std::string, std::string> result = r.maxEdmondsKarp();
-            std::cout << "\nThe maximum number of trains running between two stations is " << r.edmondsKarp(result.first, result.second) << " between the stations of " << result.first << " and " << result.second << "." << std::endl;
+            std::vector<std::pair<std::string, std::string>> vertexs;
+            double flow = r.maxEdmondsKarp(vertexs);
+            std::cout << "\nThe maximum number of trains running between two stations is " << flow << " between the stations of: " << std::endl;
+            for (auto &result : vertexs) {
+                 std::cout << result.first << " -> " << result.second << std::endl;
+            }
             Menu::voltar();
         }
         else if (op == "4") {
@@ -158,7 +162,7 @@ int main() {
                 }
                 else if (flow == -1.0) continue;
                 else {
-                    std::cout << "\nThe maximum number of trains running for " << origin << " if " << flow << "." << std::endl;
+                    std::cout << "\nThe maximum number of trains running for " << origin << " is " << flow << "." << std::endl;
                 }
                 break;
             }
@@ -205,6 +209,11 @@ int main() {
             }
         }
         else if (op == "7" ) {
+            // calcula o fluxo maximo entre todas as estações antes usando o 2.4
+            std::vector<std::pair<std::string, double>> maxFlowBefore, maxFlowAfter, affectedStations;
+            for (auto &station : r.getVertexSet()) {
+                maxFlowBefore.emplace_back(station->getName(), r.maxFlowOrigin(station->getName()));
+            }
             std::string source, target, res;
             double exist;
             bool ignoreCin = true;
@@ -278,12 +287,48 @@ int main() {
                     }
                     if (ignoreCin) continue;
                 }
-                Menu::voltar();
+                while (true) {
+                    // ask if it wants to see the repport of affect stations
+                    std::cout << "\nDo you want to see the report of affected stations? (Y/N): ";
+                    std::cin >> res;
+                    if (res == "Y" || res == "y") {
+                        // calcular o fluxo maximo de todas as estações
+                        for (auto &station: r.getVertexSet()) {
+                            maxFlowAfter.emplace_back(station->getName(), r.maxFlowOrigin(station->getName()));
+                        }
+                        // diferença entre o fluxo maximo antes e depois e guardar no vector affectedStations
+                        for (int i = 0; i < maxFlowBefore.size(); i++) {
+                            if (maxFlowBefore.at(i).first == maxFlowAfter.at(i).first) {
+                                affectedStations.emplace_back(maxFlowBefore.at(i).first,
+                                                              maxFlowBefore.at(i).second - maxFlowAfter.at(i).second);
+                            }
+                        }
+                        // sort
+                        std::sort(affectedStations.begin(), affectedStations.end(),
+                                  [](const std::pair<std::string, double> &a, const std::pair<std::string, double> &b) {
+                                      return a.second > b.second;
+                                  });
+                        // display the first 5
+                        if (affectedStations.at(0).second != 0) {
+                            std::cout << "\nThe most affected stations are: " << std::endl;
+                            for (auto &affectedStation: affectedStations) {
+                                if (affectedStation.second != 0) {
+                                    std::cout << "\nStation: " << affectedStation.first << " -- Difference: "
+                                              << affectedStation.second << std::endl;
+                                }
+                            }
+                        }
+                        else std::cout << "\nNo stations were affected!" << std::endl;
+                        break;
+                    } else if (res == "N" || res == "n") break;
+                    else {
+                        Menu::teclaErro();
+                        continue;
+                    }
+                }
                 break;
             }
-        }
-        else if (op == "8") {
-
+            Menu::voltar();
         }
         else if (op == "r" || op == "R") {
             r.readStations();

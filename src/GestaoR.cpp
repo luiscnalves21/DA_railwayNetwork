@@ -149,20 +149,27 @@ double GestaoR::edmondsKarp(const std::string &source, const std::string &target
     return flow;
 }
 
-std::pair<std::string, std::string> GestaoR::maxEdmondsKarp() {
+double GestaoR::maxEdmondsKarp(std::vector<std::pair<std::string, std::string>> &vertexs) {
     double flow = 0.0, tempFlow;
     std::pair<std::string, std::string> result;
     for (int i = 0; i < getVertexSet().size()-1; i++) {
         for (int j = i+1; j < getVertexSet().size(); j++) {
             tempFlow = edmondsKarp(getVertexSet().at(i)->getName(), getVertexSet().at(j)->getName());
             if (tempFlow > flow) {
+                vertexs.clear();
                 flow = tempFlow;
                 result.first = getVertexSet().at(i)->getName();
                 result.second = getVertexSet().at(j)->getName();
+                vertexs.push_back(result);
+            }
+            else if (tempFlow == flow) {
+                result.first = getVertexSet().at(i)->getName();
+                result.second = getVertexSet().at(j)->getName();
+                vertexs.push_back(result);
             }
         }
     }
-    return result;
+    return flow;
 }
 
 double GestaoR::maxEKtopK(const std::vector<std::string> &names) {
@@ -333,8 +340,7 @@ void GestaoR::drawMenu() {
                  "| [4] - 2.3 (top-k)                                           |\n"
                  "| [5] - 2.4 (max-trains-entire-network)                       |\n"
                  "| [6] - 3.1 (cost)                                            |\n"
-                 "| [7] - 4.1 (failures)                                        |\n"
-                 "| [8] - 4.2 (report affected stations)                        |\n"
+                 "| [7] - 4.1 (failures) 4.2 (repport)                          |\n"
                  "| [R] - Reset Graph                                           |\n"
                  "| [Q] - Exit the application                                  |\n"
                  "+-------------------------------------------------------------+\n";

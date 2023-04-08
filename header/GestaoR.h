@@ -25,7 +25,7 @@ class GestaoR {
 
         double edmondsKarp(const std::string &source, const std::string &target);
 
-        std::pair<std::string, std::string> maxEdmondsKarp();
+        double maxEdmondsKarp(std::vector<std::pair<std::string, std::string>> &vertexs);
         double maxEKtopK(const std::vector<std::string> &names);
         void topK(bool mORd, int k);
 
