@@ -3,6 +3,13 @@
 #include "header/GestaoR.h"
 #include "header/Menu.h"
 
+/**
+ * @brief Main function of the program
+ * 
+ * This function initializes the program environment
+ * 
+ * @return 0
+ */
 int main() {
     GestaoR r;
 
