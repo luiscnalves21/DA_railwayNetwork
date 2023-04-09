@@ -1,3 +1,0 @@
-C:/githubProjects/DA_railwayNetwork/cmake-build-debug/CMakeFiles/DA_railwayNetwork.dir
-C:/githubProjects/DA_railwayNetwork/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/githubProjects/DA_railwayNetwork/cmake-build-debug/CMakeFiles/rebuild_cache.dir
