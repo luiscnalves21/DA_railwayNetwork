@@ -7,7 +7,7 @@
 #include "../header/Menu.h"
 
 /**
- * @brief Constructor of the GestaoR class
+ * Constructor of the GestaoR class
  * Time Complexity: O(1)
  */
 GestaoR::GestaoR() {
@@ -15,7 +15,7 @@ GestaoR::GestaoR() {
 }
 
 /**
- * @brief Reads the file stations.csv and adds the stations to the graph, as well as grouping them by municipality and district.
+ * Reads the file stations.csv and adds the stations to the graph, as well as grouping them by municipality and district.
  * Time Complexity: O(n) (n is the size of the file excluding the header)
 */
 void GestaoR::readStations() {
@@ -97,7 +97,7 @@ void GestaoR::readStations() {
 }
 
 /**
- * @brief Reads the file network.csv and adds the connections to the graph.
+ * Reads the file network.csv and adds the connections to the graph.
  * Time Complexity: O(n) (n is the size of the file excluding the header)
 */
 void GestaoR::readNetwork() {
@@ -134,7 +134,7 @@ void GestaoR::readNetwork() {
 std::vector<Vertex *> GestaoR::getVertexSet() const { return railwayNetwork.getVertexSet(); }
 
 /**
- * @brief Checks if the station exists in the graph and if it does, executes the Edmonds-Karp algorithm.
+ * Checks if the station exists in the graph and if it does, executes the Edmonds-Karp algorithm.
  * Time Complexity: O(V*E^2+n+E) where V is the number of stations in the network, E is the number of edges, and n is the number of stations searched for in the network
  * @param source
  * @param target
@@ -165,7 +165,7 @@ double GestaoR::edmondsKarp(const std::string &source, const std::string &target
 }
 
 /**
- * @brief Executes the Edmonds-Karp algorithm for all pairs of stations in the graph
+ * Executes the Edmonds-Karp algorithm for all pairs of stations in the graph
  * Time Complexity: O(V^3*E^2) where V is the number of stations in the network, and E is the number of edges
  * @param vertexs
  * @return the maximum flow of a pair of stations
@@ -194,7 +194,7 @@ double GestaoR::maxEdmondsKarp(std::vector<std::pair<std::string, std::string>> 
 }
 
 /**
- * @brief Executes the Edmonds-Karp algorithm for all pairs of stations inside a municipality or district
+ * Executes the Edmonds-Karp algorithm for all pairs of stations inside a municipality or district
  * Time Complexity: O(n^2*V*E^2) where V is the number of stations in the network, E is the number of edges, and n is the size of the input vector
  * @param names
  * @return the maximum flow of the municipality or district
@@ -210,7 +210,7 @@ double GestaoR::maxEKtopK(const std::vector<std::string> &names) {
 }
 
 /**
- * @brief Executes the Edmonds-Karp algorithm for all pairs of stations inside a municipality or district
+ * Executes the Edmonds-Karp algorithm for all pairs of stations inside a municipality or district
  * Time Complexity: O(n^2*V*E^2+n*log(n)) where n is the size of the input vector, and V and E are the number of vertices and edges in the network
  * @param mORd
  * @param k
@@ -230,7 +230,7 @@ void GestaoR::topK(bool mORd, int k) {
 }
 
 /**
- * @brief Executes the Edmonds-Karp algorithm creating a temporary vertex and connecting it to all the stations that have only one edge
+ * Executes the Edmonds-Karp algorithm creating a temporary vertex and connecting it to all the stations that have only one edge
  * Time Complexity: O(V*E^2) where V is the number of stations in the network, and E is the number of edges
  * @param origin
  * @return
@@ -251,7 +251,7 @@ double GestaoR::maxFlowOrigin(const std::string &origin) {
 }
 
 /**
- * @brief executes the Dijkstra algorithm to find the cheapest path between two stations
+ * executes the Dijkstra algorithm to find the cheapest path between two stations
  * Time Complexity: O(E+VlogV) where E is the number of edges and V is the number of stations in the network
  * @param source
  * @param target
@@ -297,7 +297,7 @@ double GestaoR::dijkstraShortestPathCost(const std::string &source, const std::s
 bool GestaoR::existStation(const std::string &name) { return railwayNetwork.findVertexName(name) != -1; }
 
 /**
- * @brief Checks if there is a connection between two stations
+ * Checks if there is a connection between two stations
  * Time Complexity: O(n) that is the number of edges of the source vertex
  * @param source
  * @param target
@@ -316,7 +316,7 @@ double GestaoR::existConnection(const std::string &source, const std::string &ta
 }
 
 /**
- * @brief Shows the connections of a given station
+ * Shows the connections of a given station
  * Time Complexity: O(n) that is the number of edges of the source vertex
  * @param source
  * @return true if there are connections, false otherwise
@@ -339,7 +339,7 @@ bool GestaoR::showAdjacents(const std::string &source) {
 }
 
 /**
- * @brief Decreases the capacity of an edge
+ * Decreases the capacity of an edge
  * Time Complexity: O(n+m) where n is the number of edges of the source vertex and m is the number of edges of the target vertex
  * @param source
  * @param target
@@ -365,7 +365,7 @@ void GestaoR::decreaseEdge(const std::string &source, const std::string &target,
 }
 
 /**
- * @brief Function to help center text
+ * Function to help center text
  * Time Complexity: O(1)
  * @param n
  * @param v
@@ -380,7 +380,7 @@ std::pair<int, int> GestaoR::auxCenterDraw(int n, bool v) {
 }
 
 /**
- * @brief Draws the program's main menu
+ * Draws the program's main menu
  * Time Complexity: O(1)
 */
 void GestaoR::drawMenu() {
@@ -398,7 +398,7 @@ void GestaoR::drawMenu() {
 }
 
 /**
- * @brief Draws a menu that allows the user to choose the basic service metrics that he wants to see
+ * Draws a menu that allows the user to choose the basic service metrics that he wants to see
  * Time Complexity: O(1)
 */
 void GestaoR::drawBasicCostMetrics() {
@@ -415,7 +415,7 @@ void GestaoR::drawBasicCostMetrics() {
 }
 
 /**
- * @brief Draws a menu that allows the user to choose between listing the stations and listing the connections of a station
+ * Draws a menu that allows the user to choose between listing the stations and listing the connections of a station
  * Time Complexity: O(1)
 */
 void GestaoR::drawListagemMenu() {
@@ -430,7 +430,7 @@ void GestaoR::drawListagemMenu() {
 }
 
 /**
- * @brief Draws a menu that allows the user to choose between the municipalities and districts
+ * Draws a menu that allows the user to choose between the municipalities and districts
  * Time Complexity: O(1)
  */
 void GestaoR::drawBudgetMenu() {
@@ -445,7 +445,7 @@ void GestaoR::drawBudgetMenu() {
 }
 
 /**
- * @brief Draws a station
+ * Draws a station
  * Time Complexity: O(1)
  * @param order
  * @param header
@@ -497,7 +497,7 @@ void GestaoR::drawTopK(const std::string &order, bool header, int &pos, bool mOR
 }
 
 /**
- * @brief Draws the top k stations grouped by municipality or district
+ * Draws the top k stations grouped by municipality or district
  * Time Complexity: O(k) where k is the number of stations to be drawn
  * @param order
  * @param mORd
@@ -516,7 +516,7 @@ void GestaoR::drawTopKs(const std::vector<std::pair<std::string, double>> &order
 }
 
 /**
- * @brief Draws the station and respective line
+ * Draws the station and respective line
  * Time Complexity: O(1)
  * @param vertex
  * @param header
@@ -555,7 +555,7 @@ void GestaoR::drawStationAndLine(const Vertex *vertex, bool header) const {
 }
 
 /**
- * @brief Draws all the stations and respective lines
+ * Draws all the stations and respective lines
  * Time Complexity: O(V) where V is the number of stations
  */
 void GestaoR::drawStationsAndLine() const {
@@ -568,7 +568,7 @@ void GestaoR::drawStationsAndLine() const {
 }
 
 /**
- * @brief Draws the connections of a station
+ * Draws the connections of a station
  * Time Complexity O(1)
  * @param edge
  * @param header
@@ -622,7 +622,7 @@ void GestaoR::drawConnection(const Edge *edge, bool header) const {
 }
 
 /**
- * @brief Draws the connections of a station
+ * Draws the connections of a station
  * Time Complexity O(n) where n is the number of connections (edges)
  * @param sourceId
  */
@@ -638,7 +638,7 @@ void GestaoR::drawConnections(const int &sourceId) const {
 }
 
 /**
- * @brief Draws the most affected stations one by one
+ * Draws the most affected stations one by one
  * Time Complexity: O(1)
  * @param par
  * @param header
@@ -679,7 +679,7 @@ void GestaoR::drawReportedStation(const std::pair<std::string, double> &par, boo
 }
 
 /**
- * @brief Draws the most affected stations
+ * Draws the most affected stations
  * Time Complexity: O(n) where n is the size of affectedStations
  * @param affectedStations
  */
@@ -696,25 +696,25 @@ void GestaoR::drawReportedStations(const std::vector<std::pair<std::string, doub
 }
 
 /**
- * @brief Sets the maximum length of a station
+ * Sets the maximum length of a station
  * @param maxLength the maximum length of a station
 */
 void GestaoR::setMaxStationLength(int maxLength) { maxStationLength = maxLength; }
 
 /**
- * @brief Sets the maximum length of a municipality
+ * Sets the maximum length of a municipality
  * @param maxLength the maximum length of a municipality
 */
 void GestaoR::setMaxMunicipalityLength(int maxLength) { maxMunicipalityLength = maxLength; }
 
 /**
- * @brief Sets the maximum length of a district
+ * Sets the maximum length of a district
  * @param maxLength the maximum length of a district
 */
 void GestaoR::setMaxDistrictLength(int maxLength) { maxDistrictLength = maxLength; }
 
 /**
- * @brief Sets the maximum length of a line
+ * Sets the maximum length of a line
  * @param maxLength the maximum length of a line
 */
 void GestaoR::setMaxLineLength(int maxLength) { maxLineLength = maxLength; }

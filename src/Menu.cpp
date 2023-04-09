@@ -4,7 +4,7 @@
 using namespace std;
 
 /**
- * @brief If the user enters an invalid input, this function is called
+ * If the user enters an invalid input, this function is called
  * Time Complexity: O(1)
 */
 void Menu::teclaErro() {
@@ -14,7 +14,7 @@ void Menu::teclaErro() {
 }
 
 /**
- * @brief Every time the user have the option to return to the previous menu, this function is called
+ * Every time the user have the option to return to the previous menu, this function is called
  * Time Complexity: O(n) where n is the number of iterations required to get a valid input from the user
 */
 void Menu::voltar() {
@@ -29,7 +29,7 @@ void Menu::voltar() {
 }
 
 /**
- * @brief This function is called when the user enters at least an invalid station
+ * This function is called when the user enters at least an invalid station
  * Time Complexity: O(1)
 */
 void Menu::estacaoNaoExiste() {
@@ -39,7 +39,7 @@ void Menu::estacaoNaoExiste() {
 }
 
 /**
- * @brief This function is called when the user enters an invalid station
+ * This function is called when the user enters an invalid station
  * Time Complexity: O(1)
 */
 void Menu::estacaoNaoEncontrada() {
@@ -49,7 +49,7 @@ void Menu::estacaoNaoEncontrada() {
 }
 
 /**
- * @brief This function is called when the user enters the same station twice
+ * This function is called when the user enters the same station twice
  * Time Complexity: O(1)
 */
 void Menu::estacoesIguais() {
@@ -59,7 +59,7 @@ void Menu::estacoesIguais() {
 }
 
 /**
- * @brief This function is called when the user enters stations that are not connected
+ * This function is called when the user enters stations that are not connected
  * Time Complexity: O(1)
 */
 void Menu::semCaminhoPossivel() {
@@ -69,7 +69,7 @@ void Menu::semCaminhoPossivel() {
 }
 
 /**
- * @brief This function is called when the user enters a station that is not connected
+ * This function is called when the user enters a station that is not connected
  * Time Complexity: O(1)
 */
 void Menu::semCaminhoEstacao() {
@@ -79,7 +79,7 @@ void Menu::semCaminhoEstacao() {
 }
 
 /**
- * @brief This function is called when the user enters a number that is not in the range
+ * This function is called when the user enters a number that is not in the range
  * Time Complexity: O(1)
 */
 void Menu::numeroMenor() {
@@ -89,7 +89,7 @@ void Menu::numeroMenor() {
 }
 
 /**
- * @brief This function is called at the beginning of the application
+ * This function is called at the beginning of the application
  * Time Complexity: O(1)
 */
 void Menu::abriuAplicacao() {
@@ -101,7 +101,7 @@ void Menu::abriuAplicacao() {
 }
 
 /**
- * @brief This function is called at the end of the application
+ * This function is called at the end of the application
  * Time Complexity: O(1)
 */
 void Menu::fechouAplicacao() {

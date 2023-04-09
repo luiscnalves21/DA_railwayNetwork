@@ -1,5 +1,5 @@
-# Projeto DA
+# DA Project
 
-## Trabalho realizado por:
+## Group Elements:
 
 - Luís Alves up202108727@fe.up.pt

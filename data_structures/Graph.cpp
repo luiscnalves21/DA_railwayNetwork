@@ -6,7 +6,7 @@
 std::vector<Vertex *> Graph::getVertexSet() const { return vertexSet; }
 
 /**
- * @brief Finds a vertex with a given id in the graph
+ * Finds a vertex with a given id in the graph
  * Time Complexity: O(V) where V is the number of vertices
  * @param id
  * @return the vertex with the given id or nullptr if it doesn't exist
@@ -19,7 +19,7 @@ Vertex * Graph::findVertexId(const int &id) const {
 }
 
 /**
- * @brief Finds a vertex with a given name in the graph
+ * Finds a vertex with a given name in the graph
  * Time Complexity: O(V) where V is the number of vertices
  * @param name
  * @return the vertex id with the given name or -1 if it doesn't exist
@@ -32,7 +32,7 @@ int Graph::findVertexName(const std::string &name) const {
 }
 
 /**
- * @brief Adds a vertex to the graph
+ * Adds a vertex to the graph
  * Time Complexity: O(V) where V is the number of vertices
  * @param id
  * @param name
@@ -52,7 +52,7 @@ bool Graph::addVertex(const int &id, const std::string &name, const std::string 
 
 
 /**
- * @brief Removes a vertex from the graph
+ * Removes a vertex from the graph
  * Time Complexity: O(V + E) where V is the number of vertices and E is the number of edges
  * @param id
  * @return true if the vertex was removed, false otherwise
@@ -74,7 +74,7 @@ bool Graph::removeVertex(const int &id) {
 }
 
 /**
- * @brief Adds a bidirectional edge to the graph
+ * Adds a bidirectional edge to the graph
  * Time Complexity: O(1)
  * @param sourc
  * @param dest
@@ -94,19 +94,19 @@ bool Graph::addBidirectionalEdge(const int &sourc, const int &dest, double w, co
 }
 
 /**
- * @brief sets the vertexSet of stations
+ * sets the vertexSet of stations
  * @param set
  */
 void Graph::setVertexSet(const std::vector<Vertex *> &set) { this->vertexSet = set; }
 
 /**
- * @brief sets the graphMunicipalities
+ * sets the graphMunicipalities
  * @param graphMunicipalities
  */
 void Graph::setMunicipalities(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphMunicipalities) { this->municipalities = graphMunicipalities; }
 
 /**
- * @brief sets the graphDistricts
+ * sets the graphDistricts
  * @param graphDistricts
  */
 void Graph::setDistricts(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphDistricts) { this->districts = graphDistricts; }
@@ -132,7 +132,7 @@ int Graph::getMSize() const { return (int)municipalities.size(); }
 int Graph::getDSize() const { return (int)districts.size(); }
 
 /**
- * @brief Finds the shortest path to all vertices from a given source using Dijkstra's algorithm
+ * Finds the shortest path to all vertices from a given source using Dijkstra's algorithm
  * Time Complexity: O(E log V) where E is the number of edges and V is the number of vertices
  * @param s
  */
@@ -167,7 +167,7 @@ void Graph::dijkstraShortestPath(const int &s) {
 }
 
 /**
- * @brief Calculates the max-flow of a graph using the Edmonds-Karp algorithm
+ * Calculates the max-flow of a graph using the Edmonds-Karp algorithm
  * Time Complexity: O(V E^2) where V is the number of vertices and E is the number of edges
  * @param source
  * @param target
@@ -190,7 +190,7 @@ void Graph::edmondsKarp(int source, int target) {
 }
 
 /**
- * @brief Checks if a vertex is visited and if the residual is greater than 0
+ * Checks if a vertex is visited and if the residual is greater than 0
  * Time Complexity: O(1)
  * @param q
  * @param e
@@ -206,7 +206,7 @@ void Graph::testAndVisit(std::queue< Vertex*> &q, Edge *e, Vertex *w, double res
 }
 
 /**
- * @brief performs a breadth-first search on the graph to find a path from the source to the target that has residual capacity
+ * performs a breadth-first search on the graph to find a path from the source to the target that has residual capacity
  * Time Complexity: O(V + E) where V is the number of vertices and E is the number of edges
  * @param s
  * @param t
@@ -233,7 +233,7 @@ bool Graph::findAugmentingPath(Vertex *s, Vertex *t) {
 }
 
 /**
- * @brief finds the minimum residual capacity along a given path
+ * finds the minimum residual capacity along a given path
  * Time Complexity: O(V) where V is the number of vertices
  * @param s
  * @param t
@@ -256,7 +256,7 @@ double Graph::findMinResidualAlongPath(Vertex *s, Vertex *t) {
 }
 
 /**
- * @brief updates the flow along a given path by adding the minimum residual capacity to each edge
+ * updates the flow along a given path by adding the minimum residual capacity to each edge
  * Time Complexity: O(V) where V is the number of vertices
  * @param s
  * @param t
@@ -278,6 +278,6 @@ void Graph::augmentFlowAlongPath(Vertex *s, Vertex *t, double f) {
 }
 
 /**
- * @brief Default destructor
+ * Default destructor
  */
 Graph::~Graph() = default;

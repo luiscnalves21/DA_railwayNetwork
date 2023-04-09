@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['gestaor_0',['GestaoR',['../class_gestao_r.html#aab7c698252b80251802432ffce1e0dcd',1,'GestaoR']]],
+  ['getadj_1',['getAdj',['../class_vertex.html#a9858f2aa388d2bfb49d9df8f4504b5a0',1,'Vertex']]],
+  ['getcost_2',['getCost',['../class_edge.html#a721abae7e1df1796998ca91e0e02430a',1,'Edge']]],
+  ['getdest_3',['getDest',['../class_edge.html#a5cda44e9ba257b03963a1ac301371a59',1,'Edge']]],
+  ['getdist_4',['getDist',['../class_vertex.html#aa36ca926de23a6e7283be42e2930957c',1,'Vertex']]],
+  ['getdistricts_5',['getDistricts',['../class_graph.html#aa99e4b4b652138c461053dab3ce9c2c5',1,'Graph']]],
+  ['getdsize_6',['getDSize',['../class_graph.html#a22393255d6d5ba86c477fe3be13e0ef2',1,'Graph::getDSize()'],['../class_gestao_r.html#a3e1dedff53e08cbe3b00ca7b680151b4',1,'GestaoR::getDSize()']]],
+  ['getflow_7',['getFlow',['../class_edge.html#a30ff9f3127097db8dce20f5e8b15e6dc',1,'Edge']]],
+  ['getid_8',['getId',['../class_vertex.html#a75b6b4a4afc26affea59fdae48aa30b1',1,'Vertex']]],
+  ['getincoming_9',['getIncoming',['../class_vertex.html#a84b20dae22321e5a729606885357b015',1,'Vertex']]],
+  ['getline_10',['getLine',['../class_vertex.html#ad071b1a9398fc94bf5ec22e3e78c1342',1,'Vertex']]],
+  ['getmaxdistrictlength_11',['getMaxDistrictLength',['../class_gestao_r.html#a8d4ccc983f7f648a64659cec4d8fe386',1,'GestaoR']]],
+  ['getmaxlinelength_12',['getMaxLineLength',['../class_gestao_r.html#a51b98b5ca7d2e94dde4c6dc83c401b6e',1,'GestaoR']]],
+  ['getmaxmunicipalitylength_13',['getMaxMunicipalityLength',['../class_gestao_r.html#aa2e3a50a5ac74948280059cb73bd4a19',1,'GestaoR']]],
+  ['getmaxstationlength_14',['getMaxStationLength',['../class_gestao_r.html#aa9e15775fcdc04f42a62c116d3c39c18',1,'GestaoR']]],
+  ['getmsize_15',['getMSize',['../class_graph.html#a1a89a2c8801294c5fe6b3c87a1e1b9c1',1,'Graph::getMSize()'],['../class_gestao_r.html#a7b929b6bc2051d89b84507b1e028a046',1,'GestaoR::getMSize()']]],
+  ['getmunicipalities_16',['getMunicipalities',['../class_graph.html#ac6641b7a984e2d6afcc426715acd2e2f',1,'Graph']]],
+  ['getname_17',['getName',['../class_vertex.html#a9d1db1789299fd14088a7f4bc3c8e194',1,'Vertex']]],
+  ['getorig_18',['getOrig',['../class_edge.html#a6e8b08e91c0694b40edff0432fb612eb',1,'Edge']]],
+  ['getpath_19',['getPath',['../class_vertex.html#a6e120e57da6af94892fae44e05868794',1,'Vertex']]],
+  ['getservice_20',['getService',['../class_edge.html#a3d7bb7de5df17d60102ade05d59e06fc',1,'Edge']]],
+  ['getvertexset_21',['getVertexSet',['../class_graph.html#a619ac583094079134074658e29463c0e',1,'Graph::getVertexSet()'],['../class_gestao_r.html#a2d75efacb69a05573ee9491d58493532',1,'GestaoR::getVertexSet()']]],
+  ['getweight_22',['getWeight',['../class_edge.html#a1caaffca117bab3ff5b7387623a356f8',1,'Edge']]]
+];

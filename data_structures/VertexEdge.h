@@ -12,8 +12,6 @@ class Edge;
 
 #define INF std::numeric_limits<double>::max()
 
-/************************* Vertex  **************************/
-
 class Vertex {
     public:
         Vertex(int id, const std::string &name, const std::string &district, const std::string &municipality, const std::string &township, const std::string &line);
@@ -56,8 +54,6 @@ class Vertex {
         void deleteEdge(Edge *edge);
 };
 
-/********************** Edge  ****************************/
-
 class Edge {
     public:
         Edge(Vertex *orig, Vertex *dest, double w, const std::string &service, double cost);
@@ -72,15 +68,29 @@ class Edge {
         void setFlow(double flow);
         void setWeight(double weight);
     protected:
+        /**
+         * @brief destination vertex
+        */
         Vertex * dest;
+        /**
+         * @brief weight of the edge
+        */
         double weight;
+        /**
+         * @brief cost of the edge
+        */
         double cost;
-
+        /**
+         * @brief service of the edge
+        */
         std::string service;
-
-
+        /**
+         * @brief origin vertex
+        */
         Vertex *orig;
-
+        /**
+         * @brief flow of the edge
+        */
         double flow;
 };
 
