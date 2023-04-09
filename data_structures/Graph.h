@@ -26,14 +26,12 @@ class Graph {
          *  Returns true if successful, and false if a vertex with that content already exists.
          */
         bool addVertex(const int &id, const std::string &name, const std::string &district, const std::string &municipality, const std::string &township, const std::string &line);
-        bool removeEdge(const int &source, const int &dest);
         bool removeVertex(const int &id);
         /*
          * Adds an edge to a graph (this), given the contents of the source and
          * destination vertices and the edge weight (w).
          * Returns true if successful, and false if the source or destination vertex does not exist.
          */
-        bool addEdge(const int &sourc, const int &dest, double w, const std::string &service, double cost);
         bool addBidirectionalEdge(const int &sourc, const int &dest, double w, const std::string &service, double cost);
 
         void edmondsKarp(int source, int target);
@@ -44,14 +42,13 @@ class Graph {
         void setMunicipalities(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphMunicipalities);
         void setDistricts(const std::vector<std::pair<std::string, std::vector<std::string>>> &graphDistricts);
 
-        int getNumVertex() const;
         std::vector<Vertex *> getVertexSet() const;
         std::vector<std::pair<std::string, std::vector<std::string>>> getMunicipalities() const;
         std::vector<std::pair<std::string, std::vector<std::string>>> getDistricts() const;
         int getMSize() const;
         int getDSize() const;
     protected:
-        std::vector<Vertex *> vertexSet;    // vertex set
+        std::vector<Vertex *> vertexSet;
         std::vector<std::pair<std::string, std::vector<std::string>>> municipalities;
         std::vector<std::pair<std::string, std::vector<std::string>>> districts;
 

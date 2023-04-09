@@ -231,14 +231,12 @@ double GestaoR::dijkstraShortestPathCost(const std::string &source, const std::s
     Vertex *targetVertex = railwayNetwork.findVertexId(railwayNetwork.findVertexName(target));
     Vertex *temp = targetVertex;
     path.push_back(temp->getName());
-    // min-weight cycle
     while (temp->getPath() != nullptr) {
         path.push_back(temp->getPath()->getOrig()->getName());
         if (temp->getPath()->getWeight() < minWeigth)
             minWeigth = temp->getPath()->getWeight();
         temp = temp->getPath()->getOrig();
     }
-    // cost cycle
     double cost = 0.0;
     while (targetVertex->getPath() != nullptr) {
         if (targetVertex->getPath()->getService() == "STANDARD")
@@ -405,14 +403,14 @@ void GestaoR::drawTopK(const std::string &order, bool header, int &pos, bool mOR
         ++e;
     }
     std::cout << "|";
-    std::pair<int, int> padCountry = auxCenterDraw(maxLength - (int) order.length(),
+    pad = auxCenterDraw(maxLength - (int) order.length(),
                                                    (int) order.length() % 2 == 0);
-    for (int f = 0; f < padCountry.first; f++) {
+    for (int f = 0; f < pad.first; f++) {
         std::cout << " ";
         ++f;
     }
     std::cout << order;
-    for (int e = 0; e < padCountry.second; e++) {
+    for (int e = 0; e < pad.second; e++) {
         std::cout << " ";
         ++e;
     }
@@ -450,14 +448,14 @@ void GestaoR::drawStationAndLine(const Vertex *vertex, bool header) const {
         ++e;
     }
     std::cout << "|";
-    std::pair<int, int> padCountry = auxCenterDraw(getMaxLineLength() - (int) vertex->getLine().length(),
+    pad = auxCenterDraw(getMaxLineLength() - (int) vertex->getLine().length(),
                                                    (int) vertex->getLine().length() % 2 == 0);
-    for (int f = 0; f < padCountry.first; f++) {
+    for (int f = 0; f < pad.first; f++) {
         std::cout << " ";
         ++f;
     }
     std::cout << vertex->getLine();
-    for (int e = 0; e < padCountry.second; e++) {
+    for (int e = 0; e < pad.second; e++) {
         std::cout << " ";
         ++e;
     }
@@ -553,14 +551,14 @@ void GestaoR::drawReportedStation(const std::pair<std::string, double> &par, boo
         ++e;
     }
     std::cout << "|";
-    std::pair<int, int> padCountry = auxCenterDraw(11 - (int) std::to_string((int)par.second).length(),
+    pad= auxCenterDraw(11 - (int) std::to_string((int)par.second).length(),
                                                    (int) std::to_string((int)par.second).length() % 2 == 0);
-    for (int f = 0; f < padCountry.first; f++) {
+    for (int f = 0; f < pad.first; f++) {
         std::cout << " ";
         ++f;
     }
     std::cout << std::to_string((int)par.second);
-    for (int e = 0; e < padCountry.second; e++) {
+    for (int e = 0; e < pad.second; e++) {
         std::cout << " ";
         ++e;
     }

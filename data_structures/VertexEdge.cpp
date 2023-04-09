@@ -1,8 +1,4 @@
-// By: Gonçalo Leão
-
 #include "VertexEdge.h"
-
-/************************* Vertex  **************************/
 
 Vertex::Vertex(int id, const std::string &name, const std::string &district, const std::string &municipality, const std::string &township, const std::string &line) {
     this->id = id;
@@ -38,7 +34,7 @@ bool Vertex::removeEdge(int destID) {
         if (dest->getId() == destID) {
             it = adj.erase(it);
             deleteEdge(edge);
-            removedEdge = true; // allows for multiple edges to connect the same pair of vertices (multigraph)
+            removedEdge = true;
         }
         else {
             it++;
@@ -67,21 +63,11 @@ int Vertex::getId() const { return this->id; }
 
 std::string Vertex::getName() const { return this->name; }
 
-std::string Vertex::getDistrict() const { return this->district; }
-
-std::string Vertex::getMunicipality() const { return this->municipality; }
-
-std::string Vertex::getTownship() const { return this->township; }
-
 std::string Vertex::getLine() const { return this->line; }
 
 std::vector<Edge*> Vertex::getAdj() const { return this->adj; }
 
 bool Vertex::isVisited() const { return this->visited; }
-
-bool Vertex::isProcessing() const { return this->processing; }
-
-unsigned int Vertex::getIndegree() const { return this->indegree; }
 
 double Vertex::getDist() const { return this->dist; }
 
@@ -89,13 +75,7 @@ Edge *Vertex::getPath() const { return this->path; }
 
 std::vector<Edge *> Vertex::getIncoming() const { return this->incoming; }
 
-void Vertex::setId(int id) { this->id = id; }
-
 void Vertex::setVisited(bool visited) { this->visited = visited; }
-
-void Vertex::setProcesssing(bool processing) { this->processing = processing; }
-
-void Vertex::setIndegree(unsigned int indegree) { this->indegree = indegree; }
 
 void Vertex::setDist(double dist) { this->dist = dist; }
 
@@ -116,8 +96,6 @@ void Vertex::deleteEdge(Edge *edge) {
     delete edge;
 }
 
-/********************** Edge  ****************************/
-
 Edge::Edge(Vertex *orig, Vertex *dest, double w, const std::string &service, double cost): orig(orig), dest(dest), weight(w), service(service), cost(cost) {}
 
 Vertex * Edge::getDest() const { return this->dest; }
@@ -128,17 +106,9 @@ double Edge::getCost() const { return this->cost; }
 
 Vertex * Edge::getOrig() const { return this->orig; }
 
-Edge *Edge::getReverse() const { return this->reverse; }
-
-bool Edge::isSelected() const { return this->selected; }
-
 double Edge::getFlow() const { return this->flow; }
 
 std::string Edge::getService() const { return this->service; }
-
-void Edge::setSelected(bool selected) { this->selected = selected; }
-
-void Edge::setReverse(Edge *reverse) { this->reverse = reverse; }
 
 void Edge::setFlow(double flow) { this->flow = flow; }
 

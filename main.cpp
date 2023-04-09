@@ -5,14 +5,14 @@
 
 int main() {
     GestaoR r;
+
     r.readStations();
     r.readNetwork();
 
     Menu::abriuAplicacao();
 
-    // ciclo do programa
     while (true) {
-        GestaoR::drawMenu(); // desenha o menu
+        GestaoR::drawMenu();
         std::string op;
         std::cin >> op;
         if (op.length() != 1) {
@@ -28,12 +28,10 @@ int main() {
                     Menu::teclaErro();
                     continue;
                 } else if (op1 == "1") {
-                    // listar as estações
                     r.drawStationsAndLine();
                     Menu::voltar();
                 }
                 else if (op1 == "2") {
-                    // listar as ligações de uma estação
                     std::string name;
                     bool ignoreCin = true;
                     while (true) {
@@ -47,7 +45,6 @@ int main() {
                             continue;
                         }
                         else if (r.existStation(name)) {
-                            //r.drawStationConnections(name);
                             r.showAdjacents(name);
                             break;
                         }
@@ -124,7 +121,6 @@ int main() {
                             Menu::teclaErro();
                             continue;
                         } else if (op6 == "1") {
-                            // concelhos
                             std::string k;
                             while (true) {
                                 std::cout << "\nDefine K: ";
@@ -141,7 +137,6 @@ int main() {
                             r.topK(true, std::stoi(k));
                             Menu::voltar();
                         } else if (op6 == "2") {
-                            // distritos
                             std::string k;
                             while (true) {
                                 std::cout << "\nDefine K: ";
@@ -233,7 +228,6 @@ int main() {
             }
         }
         else if (op == "4" ) {
-            // calcula o fluxo maximo entre todas as estações antes usando o 2.4
             std::vector<std::pair<std::string, double>> maxFlowBefore, maxFlowAfter, affectedStations;
             for (auto &station : r.getVertexSet()) {
                 maxFlowBefore.emplace_back(station->getName(), r.maxFlowOrigin(station->getName()));
@@ -323,23 +317,19 @@ int main() {
                     std::cout << "\nDo you want to see the report of affected stations? (Y/N): ";
                     std::cin >> res;
                     if (res == "Y" || res == "y") {
-                        // calcular o fluxo maximo de todas as estações
                         for (auto &station: r.getVertexSet()) {
                             maxFlowAfter.emplace_back(station->getName(), r.maxFlowOrigin(station->getName()));
                         }
-                        // diferença entre o fluxo maximo antes e depois e guardar no vector affectedStations
                         for (int i = 0; i < maxFlowBefore.size(); i++) {
                             if (maxFlowBefore.at(i).first == maxFlowAfter.at(i).first) {
                                 affectedStations.emplace_back(maxFlowBefore.at(i).first,
                                                               maxFlowBefore.at(i).second - maxFlowAfter.at(i).second);
                             }
                         }
-                        // sort
                         std::sort(affectedStations.begin(), affectedStations.end(),
                                   [](const std::pair<std::string, double> &a, const std::pair<std::string, double> &b) {
                                       return a.second > b.second;
                                   });
-                        // display
                         if (affectedStations.at(0).second != 0) {
                             r.drawReportedStations(affectedStations);
                         }

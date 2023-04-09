@@ -1,10 +1,4 @@
-// By: Gonçalo Leão
-
 #include "Graph.h"
-
-int Graph::getNumVertex() const {
-    return (int)vertexSet.size();
-}
 
 std::vector<Vertex *> Graph::getVertexSet() const {
     return vertexSet;
@@ -39,14 +33,6 @@ bool Graph::addVertex(const int &id, const std::string &name, const std::string 
     return true;
 }
 
-bool Graph::removeEdge(const int &source, const int &dest) {
-    Vertex * srcVertex = findVertexId(source);
-    if (srcVertex == nullptr) {
-        return false;
-    }
-    return srcVertex->removeEdge(dest);
-}
-
 bool Graph::removeVertex(const int &id) {
     for (auto it = vertexSet.begin(); it != vertexSet.end(); it++) {
         if ((*it)->getId() == id) {
@@ -63,29 +49,13 @@ bool Graph::removeVertex(const int &id) {
     return false;
 }
 
-/*
- * Adds an edge to a graph (this), given the contents of the source and
- * destination vertices and the edge weight (w).
- * Returns true if successful, and false if the source or destination vertex does not exist.
- */
-bool Graph::addEdge(const int &sourc, const int &dest, double w, const std::string &service, double cost) {
-    auto v1 = findVertexId(sourc);
-    auto v2 = findVertexId(dest);
-    if (v1 == nullptr || v2 == nullptr)
-        return false;
-    v1->addEdge(v2, w, service, cost);
-    return true;
-}
-
 bool Graph::addBidirectionalEdge(const int &sourc, const int &dest, double w, const std::string &service, double cost) {
     auto v1 = findVertexId(sourc);
     auto v2 = findVertexId(dest);
     if (v1 == nullptr || v2 == nullptr)
         return false;
-    auto e1 = v1->addEdge(v2, w, service, cost);
-    auto e2 = v2->addEdge(v1, w, service, cost);
-    e1->setReverse(e2);
-    e2->setReverse(e1);
+    v1->addEdge(v2, w, service, cost);
+    v2->addEdge(v1, w, service, cost);
     return true;
 }
 
@@ -139,13 +109,11 @@ void Graph::edmondsKarp(int source, int target) {
     if (s == nullptr || t == nullptr || s == t)
         throw std::logic_error("Invalid source and/or target vertex");
 
-    // Reset the flows
     for (auto v : vertexSet) {
         for (auto e: v->getAdj()) {
             e->setFlow(0);
         }
     }
-    // Loop to find augmentation paths
     while( findAugmentingPath(s, t) ) {
         double f = findMinResidualAlongPath(s, t);
         augmentFlowAlongPath(s, t, f);
